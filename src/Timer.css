@@ -1,0 +1,37 @@
+/* Style the Countdown Timer container */
+.timer-container {
+    text-align: center;
+  }
+  
+  /* Style the Countdown Timer text */
+  .large-clock {
+    font-size: 48px;
+    font-weight: bold;
+    color: black;
+    margin: 20px 0;
+  }
+  
+  /* Style the Start button */
+  .timer-container button {
+    padding: 14px 28px;
+    background-color: #333;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 20px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-top: 20px;
+  }
+  
+  .timer-container button:hover {
+    background-color: #555;
+  }
+  
+  /* Style the Substitution Information */
+  .substitution-info {
+    /* Add your styles for the substitution information here */
+  }
+  
+  /* You can add more styles as needed for your Timer component */
+  

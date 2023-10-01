@@ -1,0 +1,48 @@
+/* ... (previous styles) */
+
+.column-container {
+    display: flex;
+  }
+  
+  .column {
+    flex: 1; /* Make columns the same width */
+    border: 1px solid #000; /* Add borders around columns */
+    padding: 10px;
+    margin-right: 10px; /* Add some spacing between columns */
+  }
+  
+  /* Bold headings within the columns */
+  .column h2 {
+    font-weight: bold !important; /* Use !important to ensure the style is applied */
+  }
+  
+  /* ... (other styles) */
+  /* ... (other styles) */
+  
+  /* Add these styles to your Game.css file */
+
+.substitution-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Center horizontally */
+}
+
+.select-subs-button {
+  margin-right: 10px; /* Adjust the margin as needed for spacing */
+}
+
+.spacer {
+  width: 10px; /* Adjust the width as needed for spacing */
+}
+
+.update-subs-button {
+  /* Add any specific styling for the "Update Subs" button here */
+}
+
+.timer {
+  font-size: 50px; /* Adjust the font size as needed */
+  color: red; /* Make the text red */
+}
+  
+
+  

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="description" content="Web site created using create-react-app" />
+  <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+  <!--
+    manifest.json provides metadata used when your web app is installed on a
+    user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
+  -->
+  <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+  <!--
+    Notice the use of %PUBLIC_URL% in the tags above.
+    It will be replaced with the URL of the `public` folder during the build.
+    Only files inside the `public` folder can be referenced from the HTML.
+
+    Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+    work correctly both with client-side routing and a non-root public URL.
+    Learn how to configure a non-root public URL by running `npm run build`.
+  -->
+  <title>Ezy Subs</title>
+  <style>
+    /* Add custom CSS styles for buttons and other elements */
+    body, h1, h2, p, ul, li, button {
+      margin: 0;
+      padding: 0;
+      text-align: center;
+      color: black; /* Set text color to black */
+    }
+
+    /* Set the border size to 25% of the viewport width and height */
+    body {
+      font-family: Arial, sans-serif;
+      background-image: url('%PUBLIC_URL%/court.png'); /* Set the background image */
+      background-size: 90%; /* Shrink the image to 90% of the container while maintaining aspect ratio */
+      background-repeat: no-repeat; /* Prevent image repetition */
+      background-position: center; /* Center the background image horizontally and vertically */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100vw; /* 100% of the viewport width (vw) */
+      height: 100vh; /* 100% of the viewport height (vh) */
+    }
+
+    /* Style the page container */
+    .page {
+      background-color: rgba(255, 255, 255, 0.8); /* Add a semi-transparent white background */
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      border: 1px solid #000; /* Add a square border */
+      max-width: 50%; /* Limit the container to 50% of the viewport width */
+      margin: 20px auto; /* Center the container horizontally and add spacing */
+    }
+
+    /* Style the page titles */
+    .page-title {
+      margin-bottom: 10px;
+      font-size: 24px; /* Adjust font size as needed */
+    }
+
+    /* Style the page buttons */
+    .page-button {
+      padding: 10px 20px;
+      background-color: #333; /* Dark gray background color */
+      color: #fff; /* White text color */
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      margin-top: 10px; /* Add spacing between title and button */
+    }
+
+    .page-button:hover {
+      background-color: #555; /* Darken the background color on hover */
+    }
+
+    /* Add the team-setup-button class to the corresponding buttons */
+    .team-setup-button {
+      margin-top: 20px; /* Add spacing between title and button */
+    }
+
+    /* Style the substitution title */
+    .substitution-title {
+      font-size: 24px;
+      margin-bottom: 10px;
+      color: black; /* Set the font color to black */
+    }
+
+    /* Style the substitution information section */
+    .substitution-info {
+      /* Add your styles for the substitution information section */
+    }
+  </style>
+</head>
+<body>
+  <noscript>You need to enable JavaScript to run this app.</noscript>
+  <div id="root">
+    <div class="page game-info">
+      <h1 class="page-title">Game Information</h1>
+      <div class="substitution-title">Substitution Information</div>
+      <div class="substitution-info">
+        <!-- Add your substitution information here -->
+        <p>Current Players on the Court:</p>
+        <ul>
+          <li>Player 1</li>
+          <li>Player 2</li>
+          <!-- Add more players as needed -->
+        </ul>
+        <p>Players on the Bench:</p>
+        <ul>
+          <li>Player 3</li>
+          <li>Player 4</li>
+          <!-- Add more players as needed -->
+        </ul>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+
+
+
+

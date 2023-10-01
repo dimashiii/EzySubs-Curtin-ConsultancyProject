@@ -1,0 +1,129 @@
+/* Reset some default styles for better consistency */
+body, h1, h2, p, ul, li, button, input, select {
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  color: black;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-image: url('./court.png');
+  background-size: 80%;
+  background-repeat: no-repeat;
+  background-position: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  overflow: hidden;
+}
+
+/* Style the page container */
+.page-container {
+  position: relative;
+  z-index: 1;
+}
+
+/* Style the content container */
+.content-container {
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  border: 1px solid #000;
+  border-radius: 10px;
+  width: 120%; /* Set a fixed width for the content container */
+  margin: 20px auto;
+  position: relative;
+  z-index: 2;
+  max-width: 800px; /* Optionally, set a maximum width for larger screens */
+}
+
+h1, h2, h3 {
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+
+.substitution-title {
+  font-size: 24px;
+  margin-bottom: 10px;
+  color: black;
+}
+
+.substitution-info {
+  /* Add styles for the substitution information here */
+}
+
+p {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+input, select {
+  font-size: 18px;
+  padding: 12px;
+  margin: 10px 0;
+}
+
+.player-list {
+  text-align: left;
+}
+
+ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+li {
+  font-size: 18px;
+  margin-bottom: 5px;
+}
+
+button {
+  padding: 14px 28px;
+  background-color: #333;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 20px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-top: 20px;
+}
+
+
+/* Add this CSS for consistent width across all screens */
+.input-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center; /* Vertically center-align elements */
+  margin: 20px 0;
+}
+
+.input-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Align text to the left */
+}
+
+.input-group label {
+  font-size: 16px; /* Adjust font size for text labels */
+  margin-bottom: 5px;
+}
+
+.input-group input,
+.input-group select {
+  font-size: 16px; /* Adjust font size for input fields and select */
+  padding: 10px;
+}
+
+
+
+
+
+
+
