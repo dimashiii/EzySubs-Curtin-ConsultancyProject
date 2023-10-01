@@ -5,7 +5,7 @@ const MinutesPerHalfInput = ({ onMinutesPerHalfSubmit }) => {
   const [minutesToSubstitute, setMinutesToSubstitute] = useState(0);
   const [playersPerSubstitution, setPlayersPerSubstitution] = useState(0); // New state for players per substitution
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     onMinutesPerHalfSubmit(minutesPerHalf, minutesToSubstitute, playersPerSubstitution); // Pass all values to the parent component
   };
@@ -22,7 +22,7 @@ const MinutesPerHalfInput = ({ onMinutesPerHalfSubmit }) => {
               type="number"
               id="minutesPerHalf"
               value={minutesPerHalf}
-              onChange={(e) => setMinutesPerHalf(e.target.value)}
+              onChange={(e) => setMinutesPerHalf(parseInt(e.target.value))}
             />
           </div>
           <div className="input-container">
@@ -31,7 +31,7 @@ const MinutesPerHalfInput = ({ onMinutesPerHalfSubmit }) => {
               type="number"
               id="minutesToSubstitute"
               value={minutesToSubstitute}
-              onChange={(e) => setMinutesToSubstitute(e.target.value)}
+              onChange={(e) => setMinutesToSubstitute(parseInt(e.target.value))}
             />
           </div>
           <div className="input-container">
@@ -40,7 +40,7 @@ const MinutesPerHalfInput = ({ onMinutesPerHalfSubmit }) => {
               type="number"
               id="playersPerSubstitution"
               value={playersPerSubstitution}
-              onChange={(e) => setPlayersPerSubstitution(e.target.value)}
+              onChange={(e) => setPlayersPerSubstitution(parseInt(e.target.value))}
             />
           </div>
           <button type="submit">Next</button>
@@ -51,6 +51,3 @@ const MinutesPerHalfInput = ({ onMinutesPerHalfSubmit }) => {
 };
 
 export default MinutesPerHalfInput;
-
-
-

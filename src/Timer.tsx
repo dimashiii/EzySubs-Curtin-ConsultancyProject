@@ -50,9 +50,3 @@ const Timer = ({ minutes, onStart, substitutions }) => {
 };
 
 export default Timer;
-
-
-
-
-
-
