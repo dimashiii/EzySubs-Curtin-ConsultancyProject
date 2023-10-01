@@ -5,8 +5,6 @@ import NumberOfPlayersForm from './NumberOfPlayersForm';
 import PlayerInputForm from './PlayerInputForm';
 import MinutesPerHalfInput from './MinutesPerHalfInput';
 import Game from './Game';
-import Timer from './Timer';
-
 
 const App = () => {
   const [currentScreen, setCurrentScreen] = useState('home');
