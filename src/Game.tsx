@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import './Game.css';
-import alarmSound from './alarm.wav';
 
 const Game = ({ numPlayers, minutesPerHalfData, playerData }) => {
   const [playersOnCourt, setPlayersOnCourt] = useState([]);
@@ -11,7 +10,6 @@ const Game = ({ numPlayers, minutesPerHalfData, playerData }) => {
   const [firstHalfReport, setFirstHalfReport] = useState(null);
   const [secondHalfReport, setSecondHalfReport] = useState(null);
   const [timer, setTimer] = useState(20 * 60); // Timer state (20 minutes in seconds)
-  const [injuredPlayers, setInjuredPlayers] = useState([]); // Track injured players
 
   const initializePlayers = (num, minutesPerHalf) => {
     let substitutionCount = 0;
