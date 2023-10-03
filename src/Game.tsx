@@ -173,7 +173,7 @@ const Game = ({ numPlayers, minutesPerHalfData, playerData }) => {
                   {player.name} - 
                   {gameStarted && (
                     <button onClick={() => handleEmergencySubstitution(player)}>
-                      Emergency Substitute
+                      Injured
                     </button>
                   )}
                 </li>
