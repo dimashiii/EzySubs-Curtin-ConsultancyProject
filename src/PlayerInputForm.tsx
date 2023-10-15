@@ -1,16 +1,28 @@
-import React, { useState } from 'react';
+import { useMemo } from 'react';
+import { useAppDispatch, useAppSelector } from './app/store';
+import { updatePlayer } from './app/features/playerData/playersSlice';
 
 const PlayerInputForm = ({ numPlayers, onNext }) => {
-  const [playerData, setPlayerData] = useState(Array(numPlayers).fill({ name: '', size: '' }));
+  const dispatch = useAppDispatch();
+  const players = useAppSelector((state) => state.players.players);
+
+  const findPlayer = useMemo(() => {
+    return (id) => {
+      return players.find((player) => player.id === id);
+    };
+  }, [players]);
+
 
   const handleNext = () => {
-    onNext(playerData);
+    onNext(players);
   };
 
-  const handleInputChange = (e, index, field) => {
-    const newPlayerData = [...playerData];
-    newPlayerData[index] = { ...newPlayerData[index], [field]: e.target.value };
-    setPlayerData(newPlayerData);
+  const handleInputChange = (e, playerId, field) => {
+    // Find the player using the playerId and update the field and update the player in the store using the action updatePlayer
+    const player = findPlayer(playerId)
+    const newPlayer = {...player}
+    newPlayer[field] = e.target.value;
+    dispatch(updatePlayer(newPlayer))
   };
 
   return (
@@ -18,18 +30,18 @@ const PlayerInputForm = ({ numPlayers, onNext }) => {
       <div className="content-container"> {/* Use the content-container class for consistent styling */}
         <h2>Please enter player names and sizes:</h2>
         <form>
-          {Array.from({ length: numPlayers }, (_, index) => (
-            <div key={index} className="input-container"> {/* Use the input-container class for consistent styling */}
+          {players.map( (player, index) => (
+            <div key={player.id} className="input-container"> {/* Use the input-container class for consistent styling */}
               <input
                 type="text"
                 placeholder={`Player ${index + 1} Name`}
-                value={playerData[index].name}
-                onChange={(e) => handleInputChange(e, index, 'name')}
+                value={player.name}
+                onChange={(e) => handleInputChange(e, player.id, 'name')}
                 required
               />
               <select
-                value={playerData[index].size}
-                onChange={(e) => handleInputChange(e, index, 'size')}
+                value={player.size}
+                onChange={(e) => handleInputChange(e, player.id, 'size')}
                 required
               >
                 <option value="">Select Size</option>

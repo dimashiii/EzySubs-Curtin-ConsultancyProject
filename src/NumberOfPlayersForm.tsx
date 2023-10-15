@@ -1,12 +1,30 @@
 import React, { useState } from 'react';
+import { useAppDispatch } from './app/store';
+import { createPlayers } from './app/features/playerData/playersSlice';
 
 const NumberOfPlayersForm = ({ onNext }) => {
-  const [numPlayers, setNumPlayers] = useState('');
+  const dispatch = useAppDispatch();
+  const [numPlayers, setNumPlayers] = useState(0);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onNext(parseInt(numPlayers, 10));
+  const handleAddPlayersCount = (e) => {
+    setNumPlayers(parseInt(e.target.value, 10));
+  }
+  
+  const handleSubmit = () => {
+    createNewPlayers(numPlayers);
+    onNext(10);
   };
+
+  const createNewPlayers = (playersCount: number) => {
+    // Given the player count, generate a new array of players and dispatch it to the store using the action addPlayers
+    const newPlayers = Array.from({ length: playersCount }, (_, index: number) => ({
+      name: '',
+      size: '',
+      id: index,
+    }));
+    console.log('players: ', newPlayers)
+    dispatch(createPlayers(newPlayers))
+  }
 
   return (
     <div className="page-container"> {/* Use the page-container class for consistent styling */}
@@ -20,7 +38,7 @@ const NumberOfPlayersForm = ({ onNext }) => {
               id="numPlayers"
               placeholder="Number of Players"
               value={numPlayers}
-              onChange={(e) => setNumPlayers(e.target.value)}
+              onChange={handleAddPlayersCount}
               required
             />
           </div>
