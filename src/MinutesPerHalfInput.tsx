@@ -20,6 +20,7 @@ const MinutesPerHalfInput = ({ onMinutesPerHalfSubmit }) => {
     console.log(`------newGameManagement after------`, newGameManagement)
     dispatch(updateGameData(newGameManagement))
   };
+  
 
   return (
     <div className="page-container">
