@@ -12,10 +12,10 @@ const Game = () => {
   const [lastSubstitution, setLastSubstitution] = useState([]);
   const [firstHalfReport, setFirstHalfReport] = useState(null);
   const [secondHalfReport, setSecondHalfReport] = useState(null);
-  const [timer, setTimer] = useState(20 * 60); // Timer state (20 minutes in seconds)
+  const [timer, setTimer] = useState(minutesPerHalfData.minutesPerHalf * 60); // Timer state (20 minutes in seconds)
   const handleRestartTimer = () => {
     // Reset the timer to its initial value (20 minutes)
-    setTimer(20 * 60);
+    setTimer(minutesPerHalfData.minutesPerHalf * 60);
   };
 
   const initializePlayers = (num, minutesPerHalf) => {
@@ -172,7 +172,8 @@ const Game = () => {
         {gameStarted && (
           <div className="timer">
             <span className="timer-value red big">{formatTime(timer)}</span>
-            <button onClick={handleRestartTimer}>Reset</button>
+            <div className="spacer"></div>
+            <button onClick={handleRestartTimer}>Restart</button>
           </div>
         )}
         <div className="column-container">
