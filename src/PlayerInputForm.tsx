@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { useAppDispatch, useAppSelector } from './app/store';
 import { updatePlayer } from './app/features/playerData/playersSlice';
 
-const PlayerInputForm = ({ numPlayers, onNext }) => {
+const PlayerInputForm = ({ onNext }) => {
   const dispatch = useAppDispatch();
   const players = useAppSelector((state) => state.players.players);
 
@@ -18,7 +18,6 @@ const PlayerInputForm = ({ numPlayers, onNext }) => {
   };
 
   const handleInputChange = (e, playerId, field) => {
-    // Find the player using the playerId and update the field and update the player in the store using the action updatePlayer
     const player = findPlayer(playerId)
     const newPlayer = {...player}
     newPlayer[field] = e.target.value;

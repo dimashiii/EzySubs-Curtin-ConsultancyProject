@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import './App.css';
 import HomeScreen from './HomeScreen';
 import NumberOfPlayersForm from './NumberOfPlayersForm';
@@ -8,26 +8,16 @@ import Game from './Game';
 
 const App = () => {
   const [currentScreen, setCurrentScreen] = useState('home');
-  const [numPlayers, setNumPlayers] = useState(10);
-  const [playerData, setPlayerData] = useState([]);
-  const [minutesPerHalfData, setMinutesPerHalfData] = useState({
-    minutesPerHalf: 20,
-    minutesToSubstitute: 5,
-    playersPerSubstitution: 2,
-  });
 
   const handleNumPlayersSubmit = (num) => {
-    setNumPlayers(num);
     setCurrentScreen('playerInput');
   };
 
   const handlePlayerDataSubmit = (data) => {
-    setPlayerData(data);
     setCurrentScreen('minutesPerHalfInput');
   };
 
   const handleMinutesPerHalfSubmit = (data) => {
-    setMinutesPerHalfData(data);
     setCurrentScreen('game');
   };
 
@@ -38,16 +28,12 @@ const App = () => {
       case 'numPlayers':
         return <NumberOfPlayersForm onNext={handleNumPlayersSubmit} />;
       case 'playerInput':
-        return <PlayerInputForm numPlayers={numPlayers} onNext={handlePlayerDataSubmit} />;
+        return <PlayerInputForm onNext={handlePlayerDataSubmit} />;
       case 'minutesPerHalfInput':
         return <MinutesPerHalfInput onMinutesPerHalfSubmit={handleMinutesPerHalfSubmit} />;
       case 'game':
         return (
-          <Game
-            numPlayers={numPlayers}
-            minutesPerHalfData={minutesPerHalfData}
-            playerData={playerData}
-          />
+          <Game />
         );
       default:
         return null;

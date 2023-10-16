@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import './Game.css';
+import { useAppSelector } from './app/store';
 
-const Game = ({ numPlayers, minutesPerHalfData, playerData }) => {
+const Game = () => {
+  const playersData = useAppSelector(state => state.players.players)
+  const minutesPerHalfData = useAppSelector(state => state.gameManagement)
   const [playersOnCourt, setPlayersOnCourt] = useState([]);
   const [playersOnBench, setPlayersOnBench] = useState([]);
   const [isSecondHalf, setIsSecondHalf] = useState(false);
@@ -14,7 +17,7 @@ const Game = ({ numPlayers, minutesPerHalfData, playerData }) => {
   const initializePlayers = (num, minutesPerHalf) => {
     let substitutionCount = 0;
 
-    const players = playerData.slice(0, num).map((player, index) => {
+    const players = playersData.slice(0, num).map((player, index) => {
       const isSubstituted = index >= 5;
       if (isSubstituted) {
         substitutionCount++;
@@ -39,20 +42,23 @@ const Game = ({ numPlayers, minutesPerHalfData, playerData }) => {
     return players;
   };
 
-  useEffect(() => {
-    const initialPlayers = initializePlayers(numPlayers, minutesPerHalfData.minutesPerHalf);
-    const initialStartingLineup = initializeStartingLineup(initialPlayers);
-
-    setPlayersOnCourt([...initialStartingLineup]);
-    setPlayersOnBench([...initialPlayers.filter(player => !initialStartingLineup.includes(player))]);
-  }, [numPlayers, minutesPerHalfData.minutesPerHalf]);
-
   const initializeStartingLineup = (players) => {
     const maxPlayersOnCourt = Math.min(5, players.length);
     const shuffledPlayers = shuffleArray(players);
 
     return shuffledPlayers.slice(0, maxPlayersOnCourt);
   };
+
+
+  useEffect(() => {
+    const initialPlayers = initializePlayers(playersData.length, minutesPerHalfData.minutesPerHalf);
+    const initialStartingLineup = initializeStartingLineup(initialPlayers);
+
+    setPlayersOnCourt([...initialStartingLineup]);
+    setPlayersOnBench([...initialPlayers.filter(player => !initialStartingLineup.includes(player))]);
+ }, [playersData, minutesPerHalfData.minutesPerHalf]);
+
+  
 
   const shuffleArray = (array) => {
     const shuffledArray = [...array];

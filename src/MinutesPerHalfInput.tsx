@@ -1,13 +1,24 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useAppDispatch, useAppSelector } from './app/store';
+import { updateGameData } from './app/features/gameManagement/gameManagementSlice';
 
 const MinutesPerHalfInput = ({ onMinutesPerHalfSubmit }) => {
-  const [minutesPerHalf, setMinutesPerHalf] = useState(0);
-  const [minutesToSubstitute, setMinutesToSubstitute] = useState(0);
-  const [playersPerSubstitution, setPlayersPerSubstitution] = useState(0); // New state for players per substitution
+  const gameManagement = useAppSelector((state) => state.gameManagement);
+  const { minutesPerHalf, minutesToSubstitute, playersPerSubstitution }  = gameManagement;
+  const dispatch = useAppDispatch();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     onMinutesPerHalfSubmit(minutesPerHalf, minutesToSubstitute, playersPerSubstitution); // Pass all values to the parent component
+  };
+
+  const handleInputChange = (e, field) => {
+    const newGameManagement = {...gameManagement}
+    console.log(`------newGameManagement------`, newGameManagement)
+    console.log(`------field------`, field)
+    newGameManagement[field] = e.target.value;
+    console.log(`------newGameManagement after------`, newGameManagement)
+    dispatch(updateGameData(newGameManagement))
   };
 
   return (
@@ -22,7 +33,7 @@ const MinutesPerHalfInput = ({ onMinutesPerHalfSubmit }) => {
               type="number"
               id="minutesPerHalf"
               value={minutesPerHalf}
-              onChange={(e) => setMinutesPerHalf(parseInt(e.target.value))}
+              onChange={(e) => handleInputChange(e, 'minutesPerHalf')}
             />
           </div>
           <div className="input-container">
@@ -31,7 +42,7 @@ const MinutesPerHalfInput = ({ onMinutesPerHalfSubmit }) => {
               type="number"
               id="minutesToSubstitute"
               value={minutesToSubstitute}
-              onChange={(e) => setMinutesToSubstitute(parseInt(e.target.value))}
+              onChange={(e) => handleInputChange(e, 'minutesToSubstitute')}
             />
           </div>
           <div className="input-container">
@@ -40,7 +51,7 @@ const MinutesPerHalfInput = ({ onMinutesPerHalfSubmit }) => {
               type="number"
               id="playersPerSubstitution"
               value={playersPerSubstitution}
-              onChange={(e) => setPlayersPerSubstitution(parseInt(e.target.value))}
+              onChange={(e) => handleInputChange(e, 'playersPerSubstitution')}
             />
           </div>
           <button type="submit">Next</button>
