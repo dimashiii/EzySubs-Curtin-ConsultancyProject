@@ -18,7 +18,7 @@ const Game = () => {
     setTimer(minutesPerHalfData.minutesPerHalf * 60);
   };
 
-  const initializePlayers = (num, minutesPerHalf) => {
+  const initializePlayers = (num, miutesPerHalf) => {
     let substitutionCount = 0;
 
     const players = playersData.slice(0, num).map((player, index) => {
@@ -74,29 +74,41 @@ const Game = () => {
   };
 
   const updateSubs = () => {
-    const updatedPlayersOnCourt = [...playersOnBench]; // Copy the players on the bench
-    
-    // Assign the selected substitute players to the positions on the court
-    playersOnCourt.forEach((courtPlayer, index) => {
-      if (lastSubstitution.length > index) {
-        const substitutionInfo = lastSubstitution[index].split(' for ');
-        const substitutedPlayerName = substitutionInfo[1]; // Extract the player's name from the substitution string
-        const substitutedPlayer = playersOnBench.find(player => player.name === substitutedPlayerName);
-        
-        if (substitutedPlayer) {
-          updatedPlayersOnCourt[index] = substitutedPlayer; // Replace the court player with the substituted player
-          substitutedPlayer.injured = false; // Remove the injured status
-        }
+    const updatedPlayersOnCourt = [...playersOnCourt]; // Copy the players on the court
+    const updatedPlayersOnBench = [...playersOnBench]; // Copy the players on the bench
+    const substitutedPlayers = [];
+  
+    lastSubstitution.forEach(substitutionInfo => {
+      const [substituteName, originalPlayerName] = substitutionInfo
+        .replace('Substitute ', '')
+        .split(' for ');
+  
+      // Find the player objects for substitution
+      const substitutePlayer = updatedPlayersOnBench.find(player => player.name === substituteName);
+      const originalPlayer = updatedPlayersOnCourt.find(player => player.name === originalPlayerName);
+  
+      if (substitutePlayer && originalPlayer) {
+        substitutedPlayers.push(substitutionInfo);
+  
+        // Update the players on the court and bench
+        updatedPlayersOnCourt[updatedPlayersOnCourt.indexOf(originalPlayer)] = substitutePlayer;
+        updatedPlayersOnBench[updatedPlayersOnBench.indexOf(substitutePlayer)] = originalPlayer;
       }
     });
   
-    // Update the players on the court and bench
-    setPlayersOnCourt(updatedPlayersOnCourt);
-    setPlayersOnBench(playersOnCourt);
+    // Ensure there are always five players on the court
+    while (updatedPlayersOnCourt.length < 5 && updatedPlayersOnBench.length > 0) {
+      const substitutePlayer = updatedPlayersOnBench.shift();
+      updatedPlayersOnCourt.push(substitutePlayer);
+    }
   
-    // Clear the lastSubstitution list
-    setLastSubstitution([]);
+    // Update the state with substituted players
+    setPlayersOnCourt(updatedPlayersOnCourt);
+    setPlayersOnBench(updatedPlayersOnBench);
+    setLastSubstitution(substitutedPlayers);
   };
+  
+  
 
   const handleStartGame = () => {
     // Start the game
@@ -174,10 +186,28 @@ const Game = () => {
     setLastSubstitution(substitutedPlayers);
   };
 
-  const handleEmergencySubstitution = (player) => {
-    // Implement your emergency substitution logic here
-    // Ensure to mark the replaced player as injured
+  const handleEmergencySubstitution = (injuredPlayer) => {
+    // Select a player from the bench to replace the injured player
+    const randomBenchIndex = Math.floor(Math.random() * playersOnBench.length);
+    const substitutePlayer = playersOnBench[randomBenchIndex];
+  
+    // Make the substitution
+    const updatedPlayersOnCourt = [...playersOnCourt];
+    const updatedPlayersOnBench = [...playersOnBench];
+  
+    const injuredPlayerIndex = updatedPlayersOnCourt.findIndex(player => player.name === injuredPlayer.name);
+    
+    if (injuredPlayerIndex !== -1) {
+      // Replace the injured player with the substitute
+      updatedPlayersOnCourt[injuredPlayerIndex] = substitutePlayer;
+      updatedPlayersOnBench[randomBenchIndex] = injuredPlayer;
+      
+      // Update the state with substituted players
+      setPlayersOnCourt(updatedPlayersOnCourt);
+      setPlayersOnBench(updatedPlayersOnBench);
+    }
   };
+  
 
   const markPlayerAsInjured = (player) => {
     // Update the player's injured status
@@ -211,8 +241,8 @@ const Game = () => {
                 <li key={index}>
                   {player.name}
                   {gameStarted && (
-                    <button onClick={() => markPlayerAsInjured(player)} className="injured-button">
-                      x
+                    <button onClick={() => handleEmergencySubstitution(player)} className="injured-button">
+                    x
                     </button>
                   )}
                 </li>
