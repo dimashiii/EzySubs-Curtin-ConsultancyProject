@@ -30,9 +30,9 @@ const Game = () => {
       return {
         ...player,
         isSubstituted,
-        timeOnCourt: isSubstituted ? 0 : 1,
-        timeOnBench: isSubstituted ? 1 : 0,
-        substitutions: isSubstituted ? 1 : 0,
+        timeOnCourt: 0, // Initialize to zero
+        timeOnBench: 0, // Initialize to zero
+        substitutions: 0, // Initialize to zero
         injured: false, // Initially, no players are injured
       };
     });
@@ -127,7 +127,7 @@ const Game = () => {
   const currentPlayers = [...playersOnCourt, ...playersOnBench];
 
   const handleSelectSubs = () => {
-    const numSubstitutions = 3;
+    const numSubstitutions = minutesPerHalfData.playersPerSubstitution;
     const substitutedPlayers = [];
   
     const updatedCourt = [...playersOnCourt];

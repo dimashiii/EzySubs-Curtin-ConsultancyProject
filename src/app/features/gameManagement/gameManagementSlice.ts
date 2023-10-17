@@ -7,9 +7,9 @@ export interface GameManagementState {
 }
 
 const initialState: GameManagementState = {
-    minutesPerHalf: 45,
-    minutesToSubstitute: 15,
-    playersPerSubstitution: 3,
+    minutesPerHalf: 0,
+    minutesToSubstitute: 0,
+    playersPerSubstitution: 0,
 }
 
 export const gameManagementSlice = createSlice({
