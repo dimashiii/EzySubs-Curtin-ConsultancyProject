@@ -45,4 +45,82 @@
 }
   
 
+
+
+/* Center the player names and buttons */
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+ul li {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Center the items horizontally */
+}
+
+/* Style the button */
+.injured-button {
+  background-color: black;
+  color: white;
+  border: none;
+  border-radius: 50%; /* Make it circular */
+  cursor: pointer;
+  margin-left: 10px; /* Adjust the margin for spacing */
+  padding: 4px 8px; /* Adjust padding as needed for button size */
+  font-size: 14px; /* Adjust font size as needed */
+  margin-bottom: -5px; /* Negative margin to move the button up */
+}
+
+
+
+
+
+/* Add styles to center the player statistics container and its contents */
+.player-stats-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.player-stats-container h3 {
+  margin: 10px 0;
+}
+
+/* Rest of your CSS styles */
+
+/* Add spacing between the columns in the table header */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th {
+  padding: 8px 16px; /* Adjust the padding values as needed */
+}
+
+
+
+
+/* Center the timer and align the restart button to the right with spacing */
+.timer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 5px; 
+}
+
+.restart-button {
+  margin-left: 1px; /* Adjust the margin as needed for spacing */
+    
+}
+
+
+
+
+
+
+
+
   

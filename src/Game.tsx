@@ -74,8 +74,28 @@ const Game = () => {
   };
 
   const updateSubs = () => {
-    // This function is intentionally left empty as you requested not to update "Most Recent Substitutions."
-    // If you want to add functionality to "Update Subs," please specify what it should do.
+    const updatedPlayersOnCourt = [...playersOnBench]; // Copy the players on the bench
+    
+    // Assign the selected substitute players to the positions on the court
+    playersOnCourt.forEach((courtPlayer, index) => {
+      if (lastSubstitution.length > index) {
+        const substitutionInfo = lastSubstitution[index].split(' for ');
+        const substitutedPlayerName = substitutionInfo[1]; // Extract the player's name from the substitution string
+        const substitutedPlayer = playersOnBench.find(player => player.name === substitutedPlayerName);
+        
+        if (substitutedPlayer) {
+          updatedPlayersOnCourt[index] = substitutedPlayer; // Replace the court player with the substituted player
+          substitutedPlayer.injured = false; // Remove the injured status
+        }
+      }
+    });
+  
+    // Update the players on the court and bench
+    setPlayersOnCourt(updatedPlayersOnCourt);
+    setPlayersOnBench(playersOnCourt);
+  
+    // Clear the lastSubstitution list
+    setLastSubstitution([]);
   };
 
   const handleStartGame = () => {
@@ -132,6 +152,7 @@ const Game = () => {
   
     const updatedCourt = [...playersOnCourt];
     const updatedBench = [...playersOnBench];
+    
   
     for (let i = 0; i < numSubstitutions; i++) {
       if (updatedCourt.length > 0 && updatedBench.length > 0) {
@@ -155,9 +176,15 @@ const Game = () => {
 
   const handleEmergencySubstitution = (player) => {
     // Implement your emergency substitution logic here
-    // You can replace the injured player with a substitute player
     // Ensure to mark the replaced player as injured
   };
+
+  const markPlayerAsInjured = (player) => {
+    // Update the player's injured status
+    player.injured = true;
+  
+  };
+  
 
   const formatTime = (seconds) => {
     const minutes = Math.floor(seconds / 60);
@@ -173,7 +200,7 @@ const Game = () => {
           <div className="timer">
             <span className="timer-value red big">{formatTime(timer)}</span>
             <div className="spacer"></div>
-            <button onClick={handleRestartTimer}>Restart</button>
+            <button onClick={handleRestartTimer} className="restart-button">Restart</button>
           </div>
         )}
         <div className="column-container">
@@ -182,15 +209,16 @@ const Game = () => {
             <ul>
               {playersOnCourt.map((player, index) => (
                 <li key={index}>
-                  {player.name} - 
+                  {player.name}
                   {gameStarted && (
-                    <button onClick={() => handleEmergencySubstitution(player)}>
-                      Injured
+                    <button onClick={() => markPlayerAsInjured(player)} className="injured-button">
+                      x
                     </button>
                   )}
                 </li>
               ))}
             </ul>
+
           </div>
           <div className="column">
             <p className="column-heading">Players on the Bench:</p>
@@ -205,7 +233,7 @@ const Game = () => {
         </div>
         {gameStarted && (
           <div className="substitution-info">
-            <h3>Most Recent Substitutions</h3>
+            <h3>Substitutions</h3>
             {lastSubstitution && lastSubstitution.length > 0 && (
               <ul>
                 {lastSubstitution.map((pair, pairIndex) => (
@@ -245,25 +273,27 @@ const Game = () => {
             </ul>
           </>
         )}
-        <h3>Player Statistics</h3>
-        <table>
-          <thead>
-            <tr>
-              <th>Player Name</th>
-              <th>Minutes on Court</th>
-              <th>Substitutions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {currentPlayers.map((player, index) => (
-              <tr key={index}>
-                <td>{player.name}</td>
-                <td>{player.timeOnCourt} minutes</td>
-                <td>{player.substitutions}</td>
+        <div className="player-stats-container">
+          <h3>Player Statistics</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Player Name</th>
+                <th>Minutes on Court</th>
+                <th>Substitutions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {currentPlayers.map((player, index) => (
+                <tr key={index}>
+                  <td>{player.name}</td>
+                  <td>{player.timeOnCourt} minutes</td>
+                  <td>{player.substitutions}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
