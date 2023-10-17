@@ -27,7 +27,7 @@ const MinutesPerHalfInput = ({ onMinutesPerHalfSubmit }) => {
       <div className="content-container">
         <h1>Ezy Subs</h1>
         <form onSubmit={handleSubmit}>
-          <h2>Please enter the number of minutes per half, minutes for substitution, and players per substitution:</h2>
+          <h2>Substitution Setup</h2>
           <div className="input-container">
             <label htmlFor="minutesPerHalf">Minutes per half:</label>
             <input
@@ -37,15 +37,7 @@ const MinutesPerHalfInput = ({ onMinutesPerHalfSubmit }) => {
               onChange={(e) => handleInputChange(e, 'minutesPerHalf')}
             />
           </div>
-          <div className="input-container">
-            <label htmlFor="minutesToSubstitute">Minutes to substitute:</label>
-            <input
-              type="number"
-              id="minutesToSubstitute"
-              value={minutesToSubstitute}
-              onChange={(e) => handleInputChange(e, 'minutesToSubstitute')}
-            />
-          </div>
+          
           <div className="input-container">
             <label htmlFor="playersPerSubstitution">Number of players per substitution:</label>
             <input
