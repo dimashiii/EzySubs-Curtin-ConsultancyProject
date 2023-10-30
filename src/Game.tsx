@@ -7,12 +7,9 @@ const Game = () => {
   const minutesPerHalfData = useAppSelector(state => state.gameManagement)
   const [playersOnCourt, setPlayersOnCourt] = useState([]);
   const [playersOnBench, setPlayersOnBench] = useState([]);
-  const [isSecondHalf, setIsSecondHalf] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
   const [lastSubstitution, setLastSubstitution] = useState([]);
-  const [firstHalfReport, setFirstHalfReport] = useState(null);
-  const [secondHalfReport, setSecondHalfReport] = useState(null);
-  const [timer, setTimer] = useState(minutesPerHalfData.minutesPerHalf * 60); // Timer state (20 minutes in seconds)
+  const [timer, setTimer] = useState(minutesPerHalfData.minutesPerHalf * 60); 
   const handleRestartTimer = () => {
     // Reset the timer to its initial value (20 minutes)
     setTimer(minutesPerHalfData.minutesPerHalf * 60);
@@ -131,30 +128,6 @@ const Game = () => {
     // Cleanup the interval when the component unmounts or when the game ends
     return () => clearInterval(countdown);
   }, [gameStarted, timer]);
-
-  const handleHalfTime = () => {
-    const currentPlayers = [...playersOnCourt, ...playersOnBench];
-    const halfReport = currentPlayers.map(player => ({
-      name: player.name,
-      timeOnCourt: player.timeOnCourt,
-      timeOnBench: player.timeOnBench,
-      substitutions: player.substitutions,
-    }));
-
-    if (isSecondHalf) {
-      setSecondHalfReport(halfReport);
-    } else {
-      setFirstHalfReport(halfReport);
-    }
-
-    currentPlayers.forEach(player => {
-      player.timeOnCourt = 0;
-      player.timeOnBench = 0;
-      player.substitutions = 0;
-    });
-
-    setIsSecondHalf(prevIsSecondHalf => !prevIsSecondHalf);
-  };
 
   const currentPlayers = [...playersOnCourt, ...playersOnBench];
 
@@ -283,26 +256,7 @@ const Game = () => {
         {!gameStarted && (
           <button onClick={handleStartGame}>Start Game</button>
         )}
-        {firstHalfReport && secondHalfReport && (
-          <>
-            <h3>First Half Report</h3>
-            <ul>
-              {firstHalfReport.map((player, index) => (
-                <li key={index}>
-                  {player.name} - Time on Court: {player.timeOnCourt} minutes, Time on Bench: {player.timeOnBench} minutes, Substitutions: {player.substitutions}
-                </li>
-              ))}
-            </ul>
-            <h3>Second Half Report</h3>
-            <ul>
-              {secondHalfReport.map((player, index) => (
-                <li key={index}>
-                  {player.name} - Time on Court: {player.timeOnCourt} minutes, Time on Bench: {player.timeOnBench} minutes, Substitutions: {player.substitutions}
-                </li>
-              ))}
-            </ul>
-          </>
-        )}
+               
         <div className="player-stats-container">
           <h3>Player Statistics</h3>
           <table>
