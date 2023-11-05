@@ -1,26 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import './Timer.css'; // Import your Timer component's CSS file
+import './Timer.css';
 
-const Timer = ({ minutes, onStart, substitutions }) => {
-  const [time, setTime] = useState(minutes * 60); // Convert minutes to seconds
-  const [isRunning, setIsRunning] = useState(false);
-
-  useEffect(() => {
-    let interval;
-
-    if (isRunning && time > 0) {
-      interval = setInterval(() => {
-        setTime((prevTime) => prevTime - 1);
-      }, 1000);
-    }
-
-    return () => clearInterval(interval);
-  }, [isRunning, time]);
-
-  const startTimer = () => {
-    setIsRunning(true);
-    onStart();
-  };
+const Timer = ({ minutes, onStart, onStop }) => {
+  const [timeLeft, setTimeLeft] = useState(minutes * 60);
 
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
@@ -28,25 +10,34 @@ const Timer = ({ minutes, onStart, substitutions }) => {
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
+  useEffect(() => {
+    let countdown;
+
+    if (timeLeft > 0) {
+      countdown = setInterval(() => {
+        setTimeLeft((prevTimeLeft) => prevTimeLeft - 1);
+      }, 1000); // Update every second
+    }
+
+    return () => {
+      clearInterval(countdown);
+    };
+  }, [timeLeft]);
+
   return (
     <div className="timer-container">
       <h2>Countdown Timer</h2>
-      <div className="large-clock">{formatTime(time)}</div> {/* Add the large-clock class here */}
-      <button onClick={startTimer} disabled={isRunning}>
+      <div className="large-clock">{formatTime(timeLeft)}</div>
+      <button onClick={onStart} disabled={timeLeft > 0}>
         Start
       </button>
-      {substitutions.length > 0 && (
-        <div className="substitution-info">
-          <h3>Substitution Information</h3>
-          <ul>
-            {substitutions.map((substitution, index) => (
-              <li key={index}>{substitution}</li>
-            ))}
-          </ul>
-        </div>
-      )}
+      <button onClick={onStop} disabled={timeLeft === 0}>
+        Stop
+      </button>
     </div>
   );
 };
 
 export default Timer;
+
+

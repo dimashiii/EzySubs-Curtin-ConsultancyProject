@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './Game.css';
 import { useAppSelector } from './app/store';
-
+import './Timer'
 const Game = () => {
   const playersData = useAppSelector((state) => state.players.players);
   const minutesPerHalfData = useAppSelector((state) => state.gameManagement);
@@ -12,6 +12,20 @@ const Game = () => {
   const [playerStatistics, setPlayerStatistics] = useState([]);
   const [timer, setTimer] = useState(minutesPerHalfData.minutesPerHalf * 60);
 
+  // Step 1: Create state to track player exclusion
+  const [excludedPlayers, setExcludedPlayers] = useState([]);
+
+  // Step 2: Toggle player exclusion when "play pause" button is clicked
+  const togglePlayerExclusion = (player) => {
+    if (excludedPlayers.includes(player)) {
+      // If player is excluded, remove them from the exclusion list
+      setExcludedPlayers(excludedPlayers.filter((p) => p !== player));
+    } else {
+      // If player is not excluded, add them to the exclusion list
+      setExcludedPlayers([...excludedPlayers, player]);
+    }
+  };
+  
   const handleRestartTimer = () => {
     // Reset the timer to its initial value (20 minutes)
     setTimer(minutesPerHalfData.minutesPerHalf * 60);
@@ -146,25 +160,24 @@ const Game = () => {
   
     if (gameStarted && timer > 0) {
       countdown = setInterval(() => {
-        setTimeout(() => {
+   
           setTimer((prevTimer) => {
             const currentTime = Math.max(0, prevTimer - 1);
   
             // New: Update player's "Time on Court" when the player is on the bench
-            playersOnCourt.forEach((player) => {
-              if (player.lastOnCourt > 0) {
-                player.timeOnCourt += 1; // Increment time on court
-              }
-            });
-  
-            playersOnCourt.forEach((player) => {
-              player.lastOnCourt = currentTime;
-            });
-  
-            return currentTime;
+          playersOnCourt.forEach((player) => {
+            if (player.lastOnCourt > 0) {
+              player.timeOnCourt += 1; // Increment time on court
+            }
           });
-        }, 1000); // Delay the update by 1 second
-      });
+
+          playersOnCourt.forEach((player) => {
+            player.lastOnCourt = currentTime;
+          });
+  
+          return currentTime;
+        });
+      }, 1000); // Interval set to 1000 ms (1 second)
     } else if (timer === 0) {
       clearInterval(countdown);
     }
@@ -179,6 +192,11 @@ const Game = () => {
 
     const updatedCourt = [...playersOnCourt];
     const updatedBench = [...playersOnBench];
+
+      // Filter out the excluded players from the bench
+    const availableBenchPlayers = playersOnBench.filter(
+      (player) => !excludedPlayers.includes(player)
+    );
 
     for (let i = 0; i < numSubstitutions; i++) {
       if (updatedCourt.length > 0 && updatedBench.length > 0) {
@@ -197,6 +215,9 @@ const Game = () => {
 
         updatedCourt.splice(randomCourtIndex, 1);
         updatedBench.splice(randomBenchIndex, 1);
+
+          // Also update the available bench players to exclude the one just substituted
+        availableBenchPlayers.splice(randomBenchIndex, 1);
       }
     }
 
@@ -256,7 +277,7 @@ const Game = () => {
             <ul>
               {playersOnCourt.map((player, index) => (
                 <li key={index}>
-                  {player.name} ({formatTime(player.timeOnCourt)})
+                  {player.name} ({formatTime})
                   {gameStarted && (
                     <button
                       onClick={() => handleEmergencySubstitution(player)}
@@ -275,6 +296,16 @@ const Game = () => {
               {playersOnBench.map((player, index) => (
                 <li key={index}>
                   {player.name}
+                  {gameStarted && (
+                    
+                    <button
+                    onClick={() => togglePlayerExclusion(player)} // Step 2: Toggle exclusion
+                    className={excludedPlayers.includes(player) ? "excluded" : "rest"}
+                  >
+                    {excludedPlayers.includes(player) ? "▶" : "II"} {/* Toggle button label */}
+                  </button>
+                  )}
+
                 </li>
               ))}
             </ul>
