@@ -187,66 +187,69 @@ const Game = () => {
   const currentPlayers = [...playersOnCourt, ...playersOnBench];
 
   const handleSelectSubs = () => {
-    const numSubstitutions = minutesPerHalfData.playersPerSubstitution;
-    const substitutedPlayers = [];
+  const numSubstitutions = minutesPerHalfData.playersPerSubstitution;
+  const substitutedPlayers = [];
 
-    const updatedCourt = [...playersOnCourt];
-    const updatedBench = [...playersOnBench];
+  const availableBenchPlayers = playersOnBench.filter(
+    (player) => !excludedPlayers.includes(player)
+  );
 
-      // Filter out the excluded players from the bench
-    const availableBenchPlayers = playersOnBench.filter(
+  const updatedCourt = [...playersOnCourt];
+
+  for (let i = 0; i < numSubstitutions; i++) {
+    if (updatedCourt.length > 0 && availableBenchPlayers.length > 0) {
+      const randomCourtIndex = Math.floor(
+        Math.random() * updatedCourt.length
+      );
+      const randomBenchIndex = Math.floor(
+        Math.random() * availableBenchPlayers.length
+      );
+      const courtPlayerToSubstitute = updatedCourt[randomCourtIndex];
+      const benchPlayerToSubstitute = availableBenchPlayers[randomBenchIndex];
+
+      substitutedPlayers.push(
+        `Substitute ${benchPlayerToSubstitute.name} for ${courtPlayerToSubstitute.name}`
+      );
+
+      updatedCourt.splice(randomCourtIndex, 1);
+      availableBenchPlayers.splice(randomBenchIndex, 1);
+    }
+  }
+
+  setLastSubstitution(substitutedPlayers);
+};
+
+const handleEmergencySubstitution = (injuredPlayer) => {
+  const randomBenchIndex = Math.floor(Math.random() * playersOnBench.length);
+  let substitutePlayer = playersOnBench[randomBenchIndex];
+
+  // Check if the substitute player is excluded and get the next available player
+  if (excludedPlayers.includes(substitutePlayer)) {
+    const nextAvailablePlayer = playersOnBench.find(
       (player) => !excludedPlayers.includes(player)
     );
+    substitutePlayer = nextAvailablePlayer;
+  }
 
-    for (let i = 0; i < numSubstitutions; i++) {
-      if (updatedCourt.length > 0 && updatedBench.length > 0) {
-        const randomCourtIndex = Math.floor(
-          Math.random() * updatedCourt.length
-        );
-        const randomBenchIndex = Math.floor(
-          Math.random() * updatedBench.length
-        );
-        const courtPlayerToSubstitute = updatedCourt[randomCourtIndex];
-        const benchPlayerToSubstitute = updatedBench[randomBenchIndex];
+  const updatedPlayersOnCourt = [...playersOnCourt];
+  const updatedPlayersOnBench = [...playersOnBench];
 
-        substitutedPlayers.push(
-          `Substitute ${benchPlayerToSubstitute.name} for ${courtPlayerToSubstitute.name}`
-        );
+  const injuredPlayerIndex = updatedPlayersOnCourt.findIndex(
+    (player) => player.name === injuredPlayer.name
+  );
 
-        updatedCourt.splice(randomCourtIndex, 1);
-        updatedBench.splice(randomBenchIndex, 1);
+  if (injuredPlayerIndex !== -1) {
+    updatedPlayersOnCourt[injuredPlayerIndex] = substitutePlayer;
+    updatedPlayersOnBench[randomBenchIndex] = injuredPlayer;
 
-          // Also update the available bench players to exclude the one just substituted
-        availableBenchPlayers.splice(randomBenchIndex, 1);
-      }
-    }
+    setPlayersOnCourt(updatedPlayersOnCourt);
+    setPlayersOnBench(updatedPlayersOnBench);
 
-    setLastSubstitution(substitutedPlayers);
-  };
-
-  const handleEmergencySubstitution = (injuredPlayer) => {
-    const randomBenchIndex = Math.floor(Math.random() * playersOnBench.length);
-    const substitutePlayer = playersOnBench[randomBenchIndex];
-
-    const updatedPlayersOnCourt = [...playersOnCourt];
-    const updatedPlayersOnBench = [...playersOnBench];
-
-    const injuredPlayerIndex = updatedPlayersOnCourt.findIndex(
-      (player) => player.name === injuredPlayer.name
-    );
-
-    if (injuredPlayerIndex !== -1) {
-      updatedPlayersOnCourt[injuredPlayerIndex] = substitutePlayer;
-      updatedPlayersOnBench[randomBenchIndex] = injuredPlayer;
-
-      setPlayersOnCourt(updatedPlayersOnCourt);
-      setPlayersOnBench(updatedPlayersOnBench);
-
-      // Increment substitutions count for both the injured player and the substitute player
-      injuredPlayer.substitutions++;
-      substitutePlayer.substitutions++;
-    }
-  };
+    // Increment substitutions count for both the injured player and the substitute player
+    injuredPlayer.substitutions++;
+    substitutePlayer.substitutions++;
+  }
+};
 
   const markPlayerAsInjured = (player) => {
     player.injured = true;
@@ -293,19 +296,19 @@ const Game = () => {
           <div className="column">
             <p className="column-heading">Players on the Bench:</p>
             <ul>
-              {playersOnBench.map((player, index) => (
+            {playersOnBench.map((player, index) => (
                 <li key={index}>
-                  {player.name}
-                  {gameStarted && (
-                    
-                    <button
-                    onClick={() => togglePlayerExclusion(player)} // Step 2: Toggle exclusion
-                    className={excludedPlayers.includes(player) ? "excluded" : "rest"}
-                  >
-                    {excludedPlayers.includes(player) ? "▶" : "II"} {/* Toggle button label */}
-                  </button>
-                  )}
-
+                  {player.name} (
+                    {player.injured ? "Injured" : 
+                    gameStarted && (
+                      <button
+                        onClick={() => togglePlayerExclusion(player)}
+                        className={excludedPlayers.includes(player) ? "excluded" : "rest"}
+                      >
+                        {excludedPlayers.includes(player) ? "▶" : "II"}
+                      </button>
+                    )}
+                  )
                 </li>
               ))}
             </ul>
