@@ -1,48 +1,76 @@
 import React, { useState, useEffect } from 'react';
 import './Game.css';
 import { useAppSelector } from './app/store';
-import './Timer'
+
 const Game = () => {
-  const playersData = useAppSelector((state) => state.players.players);
-  const minutesPerHalfData = useAppSelector((state) => state.gameManagement);
+  const playersData = useAppSelector(state => state.players.players);
+  const minutesPerHalfData = useAppSelector(state => state.gameManagement);
   const [playersOnCourt, setPlayersOnCourt] = useState([]);
   const [playersOnBench, setPlayersOnBench] = useState([]);
   const [gameStarted, setGameStarted] = useState(false);
   const [lastSubstitution, setLastSubstitution] = useState([]);
+  const [timer, setTimer] = useState(minutesPerHalfData.minutesPerHalf * 60); 
   const [playerStatistics, setPlayerStatistics] = useState([]);
-  const [timer, setTimer] = useState(minutesPerHalfData.minutesPerHalf * 60);
 
-  // Step 1: Create state to track player exclusion
+  // Create state to track player exclusion
   const [excludedPlayers, setExcludedPlayers] = useState([]);
 
-  // Step 2: Toggle player exclusion when "play pause" button is clicked
+  // Create state to track player timers
+  const [playerTimers, setPlayerTimers] = useState({});
+
+  // Toggle player exclusion when "play pause" button is clicked
   const togglePlayerExclusion = (player) => {
     if (excludedPlayers.includes(player)) {
-      // If player is excluded, remove them from the exclusion list
       setExcludedPlayers(excludedPlayers.filter((p) => p !== player));
     } else {
-      // If player is not excluded, add them to the exclusion list
       setExcludedPlayers([...excludedPlayers, player]);
     }
   };
-  
+
+  const updatePlayerStatistics = () => {
+    const stats = playersData.map((player) => {
+      const playerOnCourt = playersOnCourt.find((p) => p.name === player.name);
+      const playerOnBench = playersOnBench.find((p) => p.name === player.name);
+
+      return {
+        name: player.name,
+        timeOnCourt: formatTime(playerTimers[player.name] || 0),
+        substitutions:
+          (playerOnCourt ? playerOnCourt.substitutions : 0) +
+          (playerOnBench ? playerOnBench.substitutions : 0),
+      };
+    });
+
+    setPlayerStatistics(stats);
+  };
+
   const handleRestartTimer = () => {
-    // Reset the timer to its initial value (20 minutes)
     setTimer(minutesPerHalfData.minutesPerHalf * 60);
   };
 
-  const initializePlayers = (num, minutesPerHalf) => {
+  const initializePlayers = (num, miutesPerHalf) => {
+    let substitutionCount = 0;
+
     const players = playersData.slice(0, num).map((player, index) => {
       const isSubstituted = index >= 5;
+      if (isSubstituted) {
+        substitutionCount++;
+      }
+
       return {
         ...player,
         isSubstituted,
-        timeOnCourt: 0, // New: Track player's time on court (in seconds)
+        timeOnCourt: 0,
         timeOnBench: 0,
         substitutions: 0,
         injured: false,
-        lastOnCourt: 0, // New: Track the time when the player was last on the court (in seconds)
       };
+    });
+
+    players.forEach((player, index) => {
+      if (index < 5) {
+        player.substitutions = substitutionCount;
+      }
     });
 
     return players;
@@ -55,54 +83,26 @@ const Game = () => {
     return shuffledPlayers.slice(0, maxPlayersOnCourt);
   };
 
-  const updatePlayerStatistics = () => {
-    // Create an array of player statistics
-    const stats = playersData.map((player) => {
-      const playerOnCourt = playersOnCourt.find((p) => p.name === player.name);
-      const playerOnBench = playersOnBench.find((p) => p.name === player.name);
-
-      return {
-        name: player.name,
-        timeOnCourt: formatTime(
-          playerOnCourt ? playerOnCourt.timeOnCourt : 0
-        ),
-        substitutions:
-          (playerOnCourt ? playerOnCourt.substitutions : 0) +
-          (playerOnBench ? playerOnBench.substitutions : 0),
-      };
-    });
-
-    setPlayerStatistics(stats);
-  };
-
   useEffect(() => {
-    const initialPlayers = initializePlayers(
-      playersData.length,
-      minutesPerHalfData.minutesPerHalf
-    );
+    const initialPlayers = initializePlayers(playersData.length, minutesPerHalfData.minutesPerHalf);
     const initialStartingLineup = initializeStartingLineup(initialPlayers);
 
     setPlayersOnCourt([...initialStartingLineup]);
-    setPlayersOnBench([
-      ...initialPlayers.filter((player) =>
-        !initialStartingLineup.includes(player)
-      ),
-    ]);
-  }, [playersData, minutesPerHalfData.minutesPerHalf]);
+    setPlayersOnBench([...initialPlayers.filter(player => !initialStartingLineup.includes(player))]);
 
-  useEffect(() => {
-    // Update player statistics when a substitution occurs
-    updatePlayerStatistics();
-  }, [playersOnCourt, playersOnBench]);
+    // Initialize player timers
+    const timers = {};
+    initialPlayers.forEach(player => {
+      timers[player.name] = 0;
+    });
+    setPlayerTimers(timers);
+  }, [playersData, minutesPerHalfData.minutesPerHalf]);
 
   const shuffleArray = (array) => {
     const shuffledArray = [...array];
     for (let i = shuffledArray.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
-      [shuffledArray[i], shuffledArray[j]] = [
-        shuffledArray[j],
-        shuffledArray[i],
-      ];
+      [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
     }
     return shuffledArray;
   };
@@ -111,22 +111,22 @@ const Game = () => {
     const updatedPlayersOnCourt = [...playersOnCourt];
     const updatedPlayersOnBench = [...playersOnBench];
     const substitutedPlayers = [];
-
+  
     lastSubstitution.forEach((substitutionInfo) => {
       const [substituteName, originalPlayerName] = substitutionInfo
         .replace('Substitute ', '')
         .split(' for ');
-
+  
       const substitutePlayer = updatedPlayersOnBench.find(
         (player) => player.name === substituteName
       );
       const originalPlayer = updatedPlayersOnCourt.find(
         (player) => player.name === originalPlayerName
       );
-
+  
       if (substitutePlayer && originalPlayer) {
         substitutedPlayers.push(substitutionInfo);
-
+  
         // Update the players on the court and bench
         updatedPlayersOnCourt[
           updatedPlayersOnCourt.indexOf(originalPlayer)
@@ -134,18 +134,18 @@ const Game = () => {
         updatedPlayersOnBench[
           updatedPlayersOnBench.indexOf(substitutePlayer)
         ] = originalPlayer;
-
-        // Increment substitutions count for the substituted players
-        substitutePlayer.substitutions++;
+  
+        // Increment substitutions count for both the substituted player and the substitute player
         originalPlayer.substitutions++;
+        substitutePlayer.substitutions++;
       }
     });
-
+  
     while (updatedPlayersOnCourt.length < 5 && updatedPlayersOnBench.length > 0) {
       const substitutePlayer = updatedPlayersOnBench.shift();
       updatedPlayersOnCourt.push(substitutePlayer);
     }
-
+  
     setPlayersOnCourt(updatedPlayersOnCourt);
     setPlayersOnBench(updatedPlayersOnBench);
     setLastSubstitution(substitutedPlayers);
@@ -157,99 +157,73 @@ const Game = () => {
 
   useEffect(() => {
     let countdown;
-  
+
     if (gameStarted && timer > 0) {
       countdown = setInterval(() => {
-   
-          setTimer((prevTimer) => {
-            const currentTime = Math.max(0, prevTimer - 1);
-  
-            // New: Update player's "Time on Court" when the player is on the bench
-          playersOnCourt.forEach((player) => {
-            if (player.lastOnCourt > 0) {
-              player.timeOnCourt += 1; // Increment time on court
-            }
-          });
+        setTimer(prevTimer => prevTimer - 1);
 
-          playersOnCourt.forEach((player) => {
-            player.lastOnCourt = currentTime;
-          });
-  
-          return currentTime;
+        // Update player timers for players on the court
+        const updatedPlayerTimers = { ...playerTimers };
+        playersOnCourt.forEach(player => {
+          updatedPlayerTimers[player.name] = (updatedPlayerTimers[player.name] || 0) + 1;
         });
-      }, 1000); // Interval set to 1000 ms (1 second)
+        setPlayerTimers(updatedPlayerTimers);
+      }, 1000);
     } else if (timer === 0) {
       clearInterval(countdown);
     }
-  }, [gameStarted, timer, playersOnCourt]);
-  
 
-  const currentPlayers = [...playersOnCourt, ...playersOnBench];
+    return () => clearInterval(countdown);
+  }, [gameStarted, timer, playerTimers, playersOnCourt]);
 
   const handleSelectSubs = () => {
-  const numSubstitutions = minutesPerHalfData.playersPerSubstitution;
-  const substitutedPlayers = [];
+    const numSubstitutions = minutesPerHalfData.playersPerSubstitution;
+    const substitutedPlayers = [];
 
-  const availableBenchPlayers = playersOnBench.filter(
-    (player) => !excludedPlayers.includes(player)
-  );
-
-  const updatedCourt = [...playersOnCourt];
-
-  for (let i = 0; i < numSubstitutions; i++) {
-    if (updatedCourt.length > 0 && availableBenchPlayers.length > 0) {
-      const randomCourtIndex = Math.floor(
-        Math.random() * updatedCourt.length
-      );
-      const randomBenchIndex = Math.floor(
-        Math.random() * availableBenchPlayers.length
-      );
-      const courtPlayerToSubstitute = updatedCourt[randomCourtIndex];
-      const benchPlayerToSubstitute = availableBenchPlayers[randomBenchIndex];
-
-      substitutedPlayers.push(
-        `Substitute ${benchPlayerToSubstitute.name} for ${courtPlayerToSubstitute.name}`
-      );
-
-      updatedCourt.splice(randomCourtIndex, 1);
-      availableBenchPlayers.splice(randomBenchIndex, 1);
-    }
-  }
-
-  setLastSubstitution(substitutedPlayers);
-};
-
-const handleEmergencySubstitution = (injuredPlayer) => {
-  const randomBenchIndex = Math.floor(Math.random() * playersOnBench.length);
-  let substitutePlayer = playersOnBench[randomBenchIndex];
-
-  // Check if the substitute player is excluded and get the next available player
-  if (excludedPlayers.includes(substitutePlayer)) {
-    const nextAvailablePlayer = playersOnBench.find(
+    const availableBenchPlayers = playersOnBench.filter(
       (player) => !excludedPlayers.includes(player)
     );
-    substitutePlayer = nextAvailablePlayer;
-  }
 
-  const updatedPlayersOnCourt = [...playersOnCourt];
-  const updatedPlayersOnBench = [...playersOnBench];
+    const updatedCourt = [...playersOnCourt];
 
-  const injuredPlayerIndex = updatedPlayersOnCourt.findIndex(
-    (player) => player.name === injuredPlayer.name
-  );
+    for (let i = 0; i < numSubstitutions; i++) {
+      if (updatedCourt.length > 0 && availableBenchPlayers.length > 0) {
+        const randomCourtIndex = Math.floor(Math.random() * updatedCourt.length);
+        const randomBenchIndex = Math.floor(Math.random() * availableBenchPlayers.length);
+        const courtPlayerToSubstitute = updatedCourt[randomCourtIndex];
+        const benchPlayerToSubstitute = availableBenchPlayers[randomBenchIndex];
 
-  if (injuredPlayerIndex !== -1) {
-    updatedPlayersOnCourt[injuredPlayerIndex] = substitutePlayer;
-    updatedPlayersOnBench[randomBenchIndex] = injuredPlayer;
+        if (!excludedPlayers.includes(courtPlayerToSubstitute)) {
+          substitutedPlayers.push(
+            `Substitute ${benchPlayerToSubstitute.name} for ${courtPlayerToSubstitute.name}`
+          );
 
-    setPlayersOnCourt(updatedPlayersOnCourt);
-    setPlayersOnBench(updatedPlayersOnBench);
+          updatedCourt.splice(randomCourtIndex, 1);
+          availableBenchPlayers.splice(randomBenchIndex, 1);
+        }
+      }
+    }
 
-    // Increment substitutions count for both the injured player and the substitute player
-    injuredPlayer.substitutions++;
-    substitutePlayer.substitutions++;
-  }
-};
+    setLastSubstitution(substitutedPlayers);
+  };
+
+  const handleEmergencySubstitution = (injuredPlayer) => {
+    const randomBenchIndex = Math.floor(Math.random() * playersOnBench.length);
+    const substitutePlayer = playersOnBench[randomBenchIndex];
+
+    const updatedPlayersOnCourt = [...playersOnCourt];
+    const updatedPlayersOnBench = [...playersOnBench];
+
+    const injuredPlayerIndex = updatedPlayersOnCourt.findIndex(player => player.name === injuredPlayer.name);
+    
+    if (injuredPlayerIndex !== -1) {
+      updatedPlayersOnCourt[injuredPlayerIndex] = substitutePlayer;
+      updatedPlayersOnBench[randomBenchIndex] = injuredPlayer;
+      
+      setPlayersOnCourt(updatedPlayersOnCourt);
+      setPlayersOnBench(updatedPlayersOnBench);
+    }
+  };
 
   const markPlayerAsInjured = (player) => {
     player.injured = true;
@@ -269,9 +243,7 @@ const handleEmergencySubstitution = (injuredPlayer) => {
           <div className="timer">
             <span className="timer-value red big">{formatTime(timer)}</span>
             <div className="spacer"></div>
-            <button onClick={handleRestartTimer} className="restart-button">
-              Restart
-            </button>
+            <button onClick={handleRestartTimer} className="restart-button">Restart</button>
           </div>
         )}
         <div className="column-container">
@@ -280,12 +252,9 @@ const handleEmergencySubstitution = (injuredPlayer) => {
             <ul>
               {playersOnCourt.map((player, index) => (
                 <li key={index}>
-                  {player.name} ({formatTime})
+                  {player.name}
                   {gameStarted && (
-                    <button
-                      onClick={() => handleEmergencySubstitution(player)}
-                      className="injured-button"
-                    >
+                    <button onClick={() => handleEmergencySubstitution(player)} className="injured-button">
                       x
                     </button>
                   )}
@@ -296,19 +265,17 @@ const handleEmergencySubstitution = (injuredPlayer) => {
           <div className="column">
             <p className="column-heading">Players on the Bench:</p>
             <ul>
-            {playersOnBench.map((player, index) => (
+              {playersOnBench.map((player, index) => (
                 <li key={index}>
-                  {player.name} (
-                    {player.injured ? "Injured" : 
-                    gameStarted && (
-                      <button
-                        onClick={() => togglePlayerExclusion(player)}
-                        className={excludedPlayers.includes(player) ? "excluded" : "rest"}
-                      >
-                        {excludedPlayers.includes(player) ? "▶" : "II"}
-                      </button>
-                    )}
-                  )
+                  {player.name}
+                  {gameStarted && (
+                    <button
+                      onClick={() => togglePlayerExclusion(player)}
+                      className={excludedPlayers.includes(player) ? "excluded" : "rest"}
+                    >
+                      {excludedPlayers.includes(player) ? "▶" : "II"}
+                    </button>
+                  )}
                 </li>
               ))}
             </ul>
@@ -320,44 +287,40 @@ const handleEmergencySubstitution = (injuredPlayer) => {
             {lastSubstitution && lastSubstitution.length > 0 && (
               <ul>
                 {lastSubstitution.map((pair, pairIndex) => (
-                  <li key={pairIndex}>{pair}</li>
+                  <li key={pairIndex}>
+                    {pair}
+                  </li>
                 ))}
               </ul>
             )}
             <div className="substitution-buttons">
-              <button
-                onClick={handleSelectSubs}
-                className="select-subs-button"
-              >
-                Select Subs
-              </button>
+              <button onClick={handleSelectSubs} className="select-subs-button">Select Subs</button>
               <div className="spacer"></div>
-              <button onClick={updateSubs} className="update-subs-button">
-                Update Subs
-              </button>
+              <button onClick={updateSubs} className="update-subs-button">Update Subs</button>
             </div>
           </div>
         )}
         {!gameStarted && (
           <button onClick={handleStartGame}>Start Game</button>
         )}
-
+               
         <div className="player-stats-container">
           <h3>Player Statistics</h3>
           <table>
             <thead>
               <tr>
                 <th>Player Name</th>
-                <th>Time on Court</th>
+                <th>Minutes on Court</th>
                 <th>Substitutions</th>
               </tr>
             </thead>
             <tbody>
-              {playerStatistics.map((player, index) => (
+              {playersData.map((player, index) => (
                 <tr key={index}>
                   <td>{player.name}</td>
-                  <td>{player.timeOnCourt}</td>
-                  <td>{player.substitutions}</td>
+                  <td>{formatTime(playerTimers[player.name] || 0)} </td>
+                  <td>{(playersOnCourt.find((p) => p.name === player.name)?.substitutions || 0) +
+                       (playersOnBench.find((p) => p.name === player.name)?.substitutions || 0)}</td>
                 </tr>
               ))}
             </tbody>
