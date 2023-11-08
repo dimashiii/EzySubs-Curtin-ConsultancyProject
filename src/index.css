@@ -85,7 +85,7 @@ li {
 
 button {
   padding: 14px 28px;
-  background-color: #333;
+  background-color: #0a0a09;
   color: white;
   border: none;
   border-radius: 5px;
@@ -109,6 +109,7 @@ button {
   display: flex;
   flex-direction: column;
   align-items: flex-start; /* Align text to the left */
+  
 }
 
 .input-group label {
