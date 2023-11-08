@@ -29,6 +29,7 @@
 
 .select-subs-button {
   margin-right: 10px; /* Adjust the margin as needed for spacing */
+  background-color: #0a0a09;
 }
 
 .spacer {
@@ -36,6 +37,7 @@
 }
 
 .update-subs-button {
+  background-color: #0a0a09;
   /* Add any specific styling for the "Update Subs" button here */
 }
 
@@ -137,7 +139,34 @@ th {
 
 .restart-button {
   margin-left: 1px; /* Adjust the margin as needed for spacing */
+  background-color: #0a0a09;
     
+}
+
+
+
+/* Add this in your CSS file */
+.player-button-container {
+  display: flex;
+  flex-direction: column; /* Set to 'column' to stack buttons vertically */
+}
+
+.player-button-container {
+  display: flex;
+  flex-direction: column; /* Set to 'column' to stack buttons vertically */
+  align-items: center; /* Center horizontally */
+  justify-content: center; /* Center vertically */
+}
+
+.player-button {
+  margin: 8px;
+  padding: 10px 20px;
+  border: none;
+  background-color: #f38021;
+  color: white;
+  border-radius: 10px;
+  cursor: pointer;
+  width: 80%; /* Make the buttons 80% of the container width */
 }
 
 
@@ -146,6 +175,19 @@ th {
 
 
 
+  /* ... (previous styles) */
 
+/* Add these styles for the common buttons */
+.common-button {
+  background-color: #f38021;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  padding: 10px 20px;
+  font-size: 20px;
+  margin: 8px;
+  width: 70%;
+}
 
-  
+/* ... (other styles) */

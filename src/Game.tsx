@@ -27,6 +27,18 @@ const Game = () => {
     }
   };
 
+  // Button component with common styling
+  const CommonButton = ({ player, onClick, isExcluded }) => {
+    return (
+      <button
+        onClick={() => onClick(player)}
+        className={`common-button ${isExcluded ? 'excluded' : 'rest'}`}
+      >
+        {player.name} {isExcluded ? "II" : "▶"}
+      </button>
+    );
+  };
+
   const updatePlayerStatistics = () => {
     const stats = playersData.map((player) => {
       const playerOnCourt = playersOnCourt.find((p) => p.name === player.name);
@@ -249,33 +261,27 @@ const Game = () => {
         <div className="column-container">
           <div className="column">
             <p className="column-heading">Current Players on the Court:</p>
-            <ul>
+            <div className="player-button-container">
               {playersOnCourt.map((player, index) => (
-                <li key={index}>
-                  {player.name}
-                  {gameStarted && (
-                    <button onClick={() => handleEmergencySubstitution(player)} className="injured-button">
-                      x
-                    </button>
-                  )}
-                </li>
+                <CommonButton
+                  key={index}
+                  player={player}
+                  onClick={handleEmergencySubstitution}
+                  isExcluded={excludedPlayers.includes(player)}
+                />
               ))}
-            </ul>
+            </div>
           </div>
           <div className="column">
             <p className="column-heading">Players on the Bench:</p>
             <ul>
               {playersOnBench.map((player, index) => (
                 <li key={index}>
-                  {player.name}
-                  {gameStarted && (
-                    <button
-                      onClick={() => togglePlayerExclusion(player)}
-                      className={excludedPlayers.includes(player) ? "excluded" : "rest"}
-                    >
-                      {excludedPlayers.includes(player) ? "▶" : "II"}
-                    </button>
-                  )}
+                  <CommonButton
+                    player={player}
+                    onClick={togglePlayerExclusion}
+                    isExcluded={excludedPlayers.includes(player)}
+                  />
                 </li>
               ))}
             </ul>
@@ -303,7 +309,6 @@ const Game = () => {
         {!gameStarted && (
           <button onClick={handleStartGame}>Start Game</button>
         )}
-               
         <div className="player-stats-container">
           <h3>Player Statistics</h3>
           <table>
@@ -320,7 +325,7 @@ const Game = () => {
                   <td>{player.name}</td>
                   <td>{formatTime(playerTimers[player.name] || 0)} </td>
                   <td>{(playersOnCourt.find((p) => p.name === player.name)?.substitutions || 0) +
-                       (playersOnBench.find((p) => p.name === player.name)?.substitutions || 0)}</td>
+                    (playersOnBench.find((p) => p.name === player.name)?.substitutions || 0)}</td>
                 </tr>
               ))}
             </tbody>
