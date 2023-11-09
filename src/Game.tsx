@@ -12,6 +12,10 @@ const Game = () => {
   const [timer, setTimer] = useState(minutesPerHalfData.minutesPerHalf * 60); 
   const [playerStatistics, setPlayerStatistics] = useState([]);
 
+  const handleRestartApp = () => {
+    // Reload the entire page to restart the app
+    window.location.reload();
+  };
   
 
   // Create state to track player exclusion
@@ -270,13 +274,19 @@ const Game = () => {
             <div className="spacer"></div>
             <div className="spacer"></div>
             <div className="spacer"></div>
+            <div className="spacer"></div>
+            <div className="spacer"></div>
+            <div className="spacer"></div>
+            <div className="spacer"></div>
+            <div className="spacer"></div>
+            <div className="spacer"></div>
+            <div className="spacer"></div>
             <span className="timer-value red big">{formatTime(timer)}</span>
             <div className="spacer"></div>
-            <button onClick={handleRestartTimer} className="restart-button">Restart</button>
+            <button onClick={handleRestartTimer} className="restart-button">Reset Time</button>
             <div className="spacer"></div>
-            
+            <button onClick={handleRestartApp} className="home-button">Start Again</button>
           </div>
-
         )}
         <div className="column-container">
           <div className="column">
