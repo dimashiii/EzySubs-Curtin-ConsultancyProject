@@ -34,3 +34,43 @@
     transform: rotate(360deg);
   }
 }
+
+.instructions-link {
+  margin-top: 10px;
+}
+
+.instructions-link a {
+  color: black;
+  text-decoration: none;
+}
+
+.instructions-link a:hover {
+  text-decoration: underline;
+}
+
+/* Style for headings */
+.instructions-text h3 {
+  font-weight: bold;
+  margin: 10px auto 5px; /* Center the headings and set equal margin above and below */
+  width: max-content; /* Make the container width auto-adjust to content */
+}
+
+/* Style for paragraphs */
+.instructions-text p {
+  text-align: justify;
+  margin: 5px auto; /* Center the paragraphs and set equal margin above and below */
+  width: max-content; /* Make the container width auto-adjust to content */
+}
+
+/* HomeScreen.css */
+.instructions-link {
+  text-decoration: underline;
+  cursor: pointer;
+  color: blue; /* You can customize the link color as desired */
+}
+
+.scrollable-instructions-box {
+  max-height: 300px; /* Adjust the maximum height as needed */
+  overflow: auto;
+}
+

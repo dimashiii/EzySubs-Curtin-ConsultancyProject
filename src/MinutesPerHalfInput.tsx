@@ -25,9 +25,9 @@ const MinutesPerHalfInput = ({ onMinutesPerHalfSubmit }) => {
   return (
     <div className="page-container">
       <div className="content-container">
-        <h1>Ezy Subs</h1>
+        <h1></h1>
         <form onSubmit={handleSubmit}>
-          <h2>Substitution Setup</h2>
+          <h2></h2>
           <div className="input-container">
             <label htmlFor="minutesPerHalf">Minutes per half:</label>
             <input

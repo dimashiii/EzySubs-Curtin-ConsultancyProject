@@ -27,7 +27,7 @@ const PlayerInputForm = ({ onNext }) => {
   return (
     <div className="page-container"> {/* Use the page-container class for consistent styling */}
       <div className="content-container"> {/* Use the content-container class for consistent styling */}
-        <h2>Please enter player names and sizes:</h2>
+        <h3></h3>
         <form>
           {players.map( (player, index) => (
             <div key={player.id} className="input-container"> {/* Use the input-container class for consistent styling */}
