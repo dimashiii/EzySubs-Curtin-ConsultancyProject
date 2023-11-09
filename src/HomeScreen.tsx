@@ -10,7 +10,7 @@ const HomeScreen = ({ onStart }) => {
   return (
     <div className="page-container">
       <div className="content-container wider-container rounded-container">
-        <h3>Home Screen</h3>
+        <h3>Ezy Subs</h3>
         <button onClick={onStart} className="start-button">
           Start Game
         </button>
@@ -19,7 +19,7 @@ const HomeScreen = ({ onStart }) => {
         </p>
         {showInstructions && (
           <div className="instructions-box scrollable-instructions-box">
-            <h3>Instructions</h3>
+            <h3>How To</h3>
             <div className="instructions-text">
               <h4>Number of Players Screen</h4>
               <p>1. Enter the number of players on your team.</p>

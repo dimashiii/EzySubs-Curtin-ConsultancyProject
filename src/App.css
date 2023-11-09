@@ -74,3 +74,16 @@
   overflow: auto;
 }
 
+.wider-container {
+  width: 250%; /* You can adjust the width as needed */
+}
+
+
+
+/* Style for headings and paragraphs within .instructions-text */
+.instructions-text h4,
+.instructions-text p {
+  text-align: justify;
+  margin: 10px auto; /* Center the content and set equal margin above and below */
+  width: 350px; /* Make the container width auto-adjust to content */
+}
