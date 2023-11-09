@@ -4,6 +4,8 @@ import HomeScreen from './HomeScreen';
 import NumberOfPlayersForm from './NumberOfPlayersForm';
 import PlayerInputForm from './PlayerInputForm';
 import MinutesPerHalfInput from './MinutesPerHalfInput';
+import Container from '@mui/material/Container';
+import Box from '@mui/material/Box';
 import Game from './Game';
 
 const App = () => {
@@ -41,11 +43,14 @@ const App = () => {
   };
 
   return (
-    <div className="App">
-      <header className="App-header">
+    // <div className="App">
+    <Container maxWidth="sm">
+      {/* <header className="App-header"> */}
+      <Box>
         {renderScreen()}
-      </header>
-    </div>
+      </Box>
+      {/* </header> */}
+    </Container>
   );
 };
 

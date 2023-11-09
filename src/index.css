@@ -11,7 +11,7 @@ body, h1, h2, p, ul, li, button, input, select {
 body {
   font-family: Arial, sans-serif;
   background-image: url('./court.png');
-  background-size: 100%;
+  background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
   display: flex;
@@ -25,23 +25,31 @@ body {
 
 /* Style the page container */
 .page-container {
-  position: relative;
-  z-index: 1;
+  /* position: relative;
+  z-index: 1; */
 }
 
 /* Style the content container */
-.content-container {
+/* .content-container {
   background-color: rgba(255, 255, 255, 0.8);
   padding: 20px;
   text-align: center;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   border: 1px solid #000;
   border-radius: 10px;
-  width: 120%; /* Set a fixed width for the content container */
+  width: 120%; 
   margin: 20px auto;
   position: relative;
   z-index: 2;
-  max-width: 800px; /* Optionally, set a maximum width for larger screens */
+  max-width: 800px; 
+} */
+
+.content-container {
+  background-color: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  border: 1px solid #000;
+  border-radius: 10px;
+  padding: 20px;
 }
 
 h1, h2, h3 {
