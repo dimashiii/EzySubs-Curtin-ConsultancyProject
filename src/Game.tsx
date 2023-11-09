@@ -12,6 +12,8 @@ const Game = () => {
   const [timer, setTimer] = useState(minutesPerHalfData.minutesPerHalf * 60); 
   const [playerStatistics, setPlayerStatistics] = useState([]);
 
+  
+
   // Create state to track player exclusion
   const [excludedPlayers, setExcludedPlayers] = useState([]);
 
@@ -66,7 +68,7 @@ const Game = () => {
     const players = playersData.slice(0, num).map((player, index) => {
       const isSubstituted = index >= 5;
       if (isSubstituted) {
-        substitutionCount++;
+        
       }
 
       return {
@@ -155,6 +157,7 @@ const Game = () => {
   
     while (updatedPlayersOnCourt.length < 5 && updatedPlayersOnBench.length > 0) {
       const substitutePlayer = updatedPlayersOnBench.shift();
+      substitutePlayer.substitutions = 0; // Reset the substitution count to 0
       updatedPlayersOnCourt.push(substitutePlayer);
     }
   
@@ -222,16 +225,20 @@ const Game = () => {
   const handleEmergencySubstitution = (injuredPlayer) => {
     const randomBenchIndex = Math.floor(Math.random() * playersOnBench.length);
     const substitutePlayer = playersOnBench[randomBenchIndex];
-
+  
     const updatedPlayersOnCourt = [...playersOnCourt];
     const updatedPlayersOnBench = [...playersOnBench];
-
+  
     const injuredPlayerIndex = updatedPlayersOnCourt.findIndex(player => player.name === injuredPlayer.name);
     
     if (injuredPlayerIndex !== -1) {
       updatedPlayersOnCourt[injuredPlayerIndex] = substitutePlayer;
       updatedPlayersOnBench[randomBenchIndex] = injuredPlayer;
-      
+  
+      // Increment substitutions count for the substituted player and the substitute player
+      injuredPlayer.substitutions++;
+      substitutePlayer.substitutions++;
+  
       setPlayersOnCourt(updatedPlayersOnCourt);
       setPlayersOnBench(updatedPlayersOnBench);
     }
@@ -253,10 +260,23 @@ const Game = () => {
         <h2>Game Information</h2>
         {gameStarted && (
           <div className="timer">
+            <div className="spacer"></div>
+            <div className="spacer"></div>
+            <div className="spacer"></div>
+            <div className="spacer"></div>
+            <div className="spacer"></div>
+            <div className="spacer"></div>
+            <div className="spacer"></div>
+            <div className="spacer"></div>
+            <div className="spacer"></div>
+            <div className="spacer"></div>
             <span className="timer-value red big">{formatTime(timer)}</span>
             <div className="spacer"></div>
             <button onClick={handleRestartTimer} className="restart-button">Restart</button>
+            <div className="spacer"></div>
+            
           </div>
+
         )}
         <div className="column-container">
           <div className="column">
@@ -337,6 +357,10 @@ const Game = () => {
 };
 
 export default Game;
+
+
+
+
 
 
 

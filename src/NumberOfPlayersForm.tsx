@@ -29,10 +29,10 @@ const NumberOfPlayersForm = ({ onNext }) => {
   return (
     <div className="page-container"> {/* Use the page-container class for consistent styling */}
       <div className="content-container"> {/* Use the content-container class for consistent styling */}
-        <h2>Please enter the number of players on the team:</h2>
+        <h2></h2>
         <form onSubmit={handleSubmit}>
           <div className="input-container"> {/* Use the input-container class for consistent styling */}
-            <label htmlFor="numPlayers">Number of Players:</label>
+            <label htmlFor="numPlayers">Enter Number of Players:</label>
             <input
               type="number"
               id="numPlayers"
