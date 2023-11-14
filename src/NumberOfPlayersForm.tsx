@@ -1,4 +1,8 @@
 import React, { useState } from 'react';
+import Container from '@mui/material/Container';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Input from '@mui/material/Input';
 import { useAppDispatch } from './app/store';
 import { createPlayers } from './app/features/playerData/playersSlice';
 
@@ -27,25 +31,27 @@ const NumberOfPlayersForm = ({ onNext }) => {
   }
 
   return (
-    <div className="page-container"> {/* Use the page-container class for consistent styling */}
-      <div className="content-container"> {/* Use the content-container class for consistent styling */}
-        <h2></h2>
+    <Container className="page-container"> {/* Use the page-container class for consistent styling */}
+      <Box className="content-container"> {/* Use the content-container class for consistent styling */}
+        <Typography variant="h4" component="h2" gutterBottom>
+          Enter the number of players on the team:
+        </Typography>
         <form onSubmit={handleSubmit}>
-          <div className="input-container"> {/* Use the input-container class for consistent styling */}
-            <label htmlFor="numPlayers">Enter Number of Players:</label>
-            <input
+          
+          <Input
               type="number"
               id="numPlayers"
               placeholder="Number of Players"
               value={numPlayers}
               onChange={handleAddPlayersCount}
               required
+              sx={{ width: 1, border: 1, borderColor: 'primary.main', borderRadius: 1 }}
             />
-          </div>
+            
           <button type="submit">Next</button>
         </form>
-      </div>
-    </div>
+      </Box>
+    </Container>
   );
 };
 

@@ -69,11 +69,6 @@
   color: blue; /* You can customize the link color as desired */
 }
 
-.scrollable-instructions-box {
-  max-height: 300px; /* Adjust the maximum height as needed */
-  overflow: auto;
-}
-
 .wider-container {
   width: 250%; /* You can adjust the width as needed */
 }

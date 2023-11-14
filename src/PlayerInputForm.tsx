@@ -1,4 +1,8 @@
 import { useMemo } from 'react';
+import Container from '@mui/material/Container';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Stack from '@mui/material/Stack';
 import { useAppDispatch, useAppSelector } from './app/store';
 import { updatePlayer } from './app/features/playerData/playersSlice';
 
@@ -25,36 +29,38 @@ const PlayerInputForm = ({ onNext }) => {
   };
 
   return (
-    <div className="page-container"> {/* Use the page-container class for consistent styling */}
-      <div className="content-container"> {/* Use the content-container class for consistent styling */}
-        <h3></h3>
-        <form>
-          {players.map( (player, index) => (
-            <div key={player.id} className="input-container"> {/* Use the input-container class for consistent styling */}
-              <input
-                type="text"
-                placeholder={`Player ${index + 1} Name`}
-                value={player.name}
-                onChange={(e) => handleInputChange(e, player.id, 'name')}
-                required
-              />
-              <select
-                value={player.size}
-                onChange={(e) => handleInputChange(e, player.id, 'size')}
-                required
-              >
-                <option value="">Select Size</option>
-                <option value="Big">Big</option>
-                <option value="Small">Small</option>
-              </select>
-            </div>
-          ))}
-          <button type="button" onClick={handleNext}>
-            Next
-          </button>
-        </form>
-      </div>
-    </div>
+    <Container className="page-container" sx={{ alignContent: 'center'}}> {/* Use the page-container class for consistent styling */}
+      <Box className="content-container"> {/* Use the content-container class for consistent styling */}
+        <Typography variant='h4'>Team Information</Typography>
+        <Box sx={{ maxHeight: 500, overflow: 'auto'}}>
+          <Stack spacing={1}>
+            {players.map( (player, index) => (
+              <Box key={player.id} sx={{ display:'flex'}}> {/* Use the input-container class for consistent styling */}
+                <input
+                  type="text"
+                  placeholder={`Player ${index + 1} Name`}
+                  value={player.name}
+                  onChange={(e) => handleInputChange(e, player.id, 'name')}
+                  required
+                />
+                <select
+                  value={player.size}
+                  onChange={(e) => handleInputChange(e, player.id, 'size')}
+                  required
+                >
+                  <option value="">Select Size</option>
+                  <option value="Big">Big</option>
+                  <option value="Small">Small</option>
+                </select>
+              </Box>
+            ))}
+            <button type="button" onClick={handleNext}>
+              Next
+            </button>
+          </Stack>
+        </Box>
+      </Box>
+    </Container>
   );
 };
 
