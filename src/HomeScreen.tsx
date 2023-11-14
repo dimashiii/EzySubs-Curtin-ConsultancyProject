@@ -28,7 +28,7 @@ const HomeScreen = ({ onStart }) => {
             <>
               <Typography variant='h4'>How To</Typography>
 
-              <Box className="instructions-box scrollable-instructions-box">
+              <Box sx={{ maxHeight:300, overflow: 'auto'}}>
                 <Stack spacing={2}>
                   <Item>
                     <Typography align='left' variant='h5'>Number of Players Screen</Typography>
