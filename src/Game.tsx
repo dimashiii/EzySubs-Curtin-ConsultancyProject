@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './Game.css';
 import { useAppSelector } from './app/store';
+import { Container, Box, Typography, Button, Grid, Table, TableHead, TableRow, TableCell, TableBody, Stack } from '@mui/material';
 
 const Game = () => {
   const playersData = useAppSelector(state => state.players.players);
@@ -259,188 +260,102 @@ const Game = () => {
   };
 
   return (
-    <div className="page-container">
-      <div className="content-container">
-        <h2>Game Information</h2>
-        {gameStarted && (
-          <div className="timer">
-            <div className="spacer"></div>
-            <div className="spacer"></div>
-            <div className="spacer"></div>
-            <div className="spacer"></div>
-            <div className="spacer"></div>
-            <div className="spacer"></div>
-            <div className="spacer"></div>
-            <div className="spacer"></div>
-            <div className="spacer"></div>
-            <div className="spacer"></div>
-            <div className="spacer"></div>
-            <div className="spacer"></div>
-            <div className="spacer"></div>
-            <div className="spacer"></div>
-            <div className="spacer"></div>
-            <div className="spacer"></div>
-            <div className="spacer"></div>
-            <span className="timer-value red big">{formatTime(timer)}</span>
-            <div className="spacer"></div>
-            <button onClick={handleRestartTimer} className="restart-button">Reset Time</button>
-            <div className="spacer"></div>
-            <button onClick={handleRestartApp} className="home-button">Start Again</button>
-          </div>
-        )}
-        <div className="column-container">
-          <div className="column">
-            <p className="column-heading">Current Players on the Court:</p>
-            <div className="player-button-container">
-              {playersOnCourt.map((player, index) => (
-                <CommonButton
-                  key={index}
-                  player={player}
-                  onClick={handleEmergencySubstitution}
-                  isExcluded={excludedPlayers.includes(player)}
-                />
-              ))}
-            </div>
-          </div>
-          <div className="column">
-            <p className="column-heading">Players on the Bench:</p>
-            <ul>
-              {playersOnBench.map((player, index) => (
-                <li key={index}>
-                  <CommonButton
-                    player={player}
-                    onClick={togglePlayerExclusion}
-                    isExcluded={excludedPlayers.includes(player)}
-                  />
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-        {gameStarted && (
-          <div className="substitution-info">
-            <h3>Substitutions</h3>
-            {lastSubstitution && lastSubstitution.length > 0 && (
-              <ul>
-                {lastSubstitution.map((pair, pairIndex) => (
-                  <li key={pairIndex}>
-                    {pair}
-                  </li>
-                ))}
-              </ul>
+    <Container className="page-container" maxWidth="lg">
+      <Box className="content-container" sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+          <Typography variant="h4" gutterBottom>Game Information</Typography>
+
+          {gameStarted && (
+              <Box sx={{ textAlign: 'center', mb: 4 }}>
+                  <Typography className="timer-value red big" component="span" variant="h6">{formatTime(timer)}</Typography>
+                  <Stack direction="row" spacing={2} sx={{ my: 2 }}>
+                  <Box sx={{ my: 2 }}>
+                      <Button variant="outlined" onClick={handleRestartTimer}>Reset Time</Button>
+                  </Box>
+                      <Button variant="contained" onClick={handleRestartApp}>Start Again</Button>
+                  </Stack>
+              </Box>
+          )}
+
+          <Box sx={{ maxHeight: 'calc(100vh - 300px)', overflow: 'auto'}}>
+
+            <Grid container spacing={3} sx={{ my: 2 }}>
+                <Grid item xs={12} sm={6}>
+                    <Typography variant="h6" gutterBottom>Current Players on the Court:</Typography>
+                    <Box>
+                        {playersOnCourt.map((player, index) => (
+                            <CommonButton
+                                key={index}
+                                player={player}
+                                onClick={handleEmergencySubstitution}
+                                isExcluded={excludedPlayers.includes(player)}
+                            />
+                        ))}
+                    </Box>
+                </Grid>
+
+                <Grid item xs={12} sm={6}>
+                    <Typography variant="h6" gutterBottom>Players on the Bench:</Typography>
+                    <Box component="ul">
+                        {playersOnBench.map((player, index) => (
+                            <li key={index}>
+                                <CommonButton
+                                    player={player}
+                                    onClick={togglePlayerExclusion}
+                                    isExcluded={excludedPlayers.includes(player)}
+                                />
+                            </li>
+                        ))}
+                    </Box>
+                </Grid>
+            </Grid>
+
+            {gameStarted && (
+                <Box sx={{ my: 2 }}>
+                    <Typography variant="h5" gutterBottom>Substitutions</Typography>
+                    {lastSubstitution && lastSubstitution.length > 0 && (
+                        <Box component="ul">
+                            {lastSubstitution.map((pair, pairIndex) => (
+                                <li key={pairIndex}>{pair}</li>
+                            ))}
+                        </Box>
+                    )}
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', my: 2 }}>
+                        <Button variant="outlined" onClick={handleSelectSubs}>Select Subs</Button>
+                        <Button variant="contained" onClick={updateSubs}>Update Subs</Button>
+                    </Box>
+                </Box>
             )}
-            <div className="substitution-buttons">
-              <button onClick={handleSelectSubs} className="select-subs-button">Select Subs</button>
-              <div className="spacer"></div>
-              <button onClick={updateSubs} className="update-subs-button">Update Subs</button>
-            </div>
-          </div>
-        )}
-        {!gameStarted && (
-          <button onClick={handleStartGame}>Start Game</button>
-        )}
-        <div className="player-stats-container">
-          <h3>Player Statistics</h3>
-          <table>
-            <thead>
-              <tr>
-                <th>Player Name</th>
-                <th>Minutes on Court</th>
-                <th>Substitutions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {playersData.map((player, index) => (
-                <tr key={index}>
-                  <td>{player.name}</td>
-                  <td>{formatTime(playerTimers[player.name] || 0)} </td>
-                  <td>{(playersOnCourt.find((p) => p.name === player.name)?.substitutions || 0) +
-                    (playersOnBench.find((p) => p.name === player.name)?.substitutions || 0)}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
+
+            {!gameStarted && (
+                <Button variant="contained" onClick={handleStartGame} size="large">Start Game</Button>
+            )}
+
+            <Box sx={{ width: '100%', overflowX: 'auto', my: 2 }}>
+                <Typography variant="h5" gutterBottom>Player Statistics</Typography>
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>Player Name</TableCell>
+                            <TableCell>Minutes on Court</TableCell>
+                            <TableCell>Substitutions</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {playersData.map((player, index) => (
+                            <TableRow key={index}>
+                                <TableCell>{player.name}</TableCell>
+                                <TableCell>{formatTime(playerTimers[player.name] || 0)}</TableCell>
+                                <TableCell>{(playersOnCourt.find((p) => p.name === player.name)?.substitutions || 0) +
+                                    (playersOnBench.find((p) => p.name === player.name)?.substitutions || 0)}</TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </Box>
+         </Box>
+      </Box>
+  </Container>
   );
 };
 
 export default Game;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
