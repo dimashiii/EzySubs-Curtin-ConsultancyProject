@@ -5,10 +5,17 @@ import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import { useAppDispatch, useAppSelector } from './app/store';
 import { updatePlayer } from './app/features/playerData/playersSlice';
+import TextField from '@mui/material/TextField';
+import MenuItem from '@mui/material/MenuItem';
+import Button from '@mui/material/Button';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
 
 const PlayerInputForm = ({ onNext }) => {
   const dispatch = useAppDispatch();
   const players = useAppSelector((state) => state.players.players);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const findPlayer = useMemo(() => {
     return (id) => {
@@ -29,44 +36,66 @@ const PlayerInputForm = ({ onNext }) => {
   };
 
   return (
-    <Container className="page-container" sx={{ alignContent: 'center'}}> {/* Use the page-container class for consistent styling */}
-      <Box className="content-container"> {/* Use the content-container class for consistent styling */}
-        <Typography variant='h4'>Team Information</Typography>
-        <Box sx={{ maxHeight: 500, overflow: 'auto'}}>
-          <Stack spacing={1}>
-            {players.map( (player, index) => (
-              <Box key={player.id} sx={{ display:'flex'}}> {/* Use the input-container class for consistent styling */}
-                <input
-                  type="text"
-                  placeholder={`Player ${index + 1} Name`}
-                  value={player.name}
-                  onChange={(e) => handleInputChange(e, player.id, 'name')}
-                  required
-                />
-                <select
-                  value={player.size}
-                  onChange={(e) => handleInputChange(e, player.id, 'size')}
-                  required
-                >
-                  <option value="">Select Size</option>
-                  <option value="Big">Big</option>
-                  <option value="Small">Small</option>
-                </select>
-              </Box>
-            ))}
-            <button type="button" onClick={handleNext}>
-              Next
-            </button>
-          </Stack>
-        </Box>
+    <Container className="page-container" sx={{ 
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: '100vh',
+      padding: 2
+  }}>
+      <Box 
+          className="content-container" 
+          sx={{ 
+              width: '100%', 
+              maxWidth: isMobile ? 350 : 800
+          }}
+      >
+          <Typography variant='h4' align="center">Team Information</Typography>
+          <Box sx={{ maxHeight: 500, overflow: 'auto', width: '100%' }}>
+              <Stack spacing={2}>
+                  {players.map( (player, index) => (
+                      <Box 
+                          key={player.id} 
+                          sx={{ 
+                              display: 'flex', 
+                              flexDirection: isMobile ? 'column' : 'row',
+                              alignItems: 'center',
+                              width: '100%'
+                          }}
+                      >
+                          <TextField 
+                              fullWidth
+                              type="text"
+                              label={`Player ${index + 1} Name`}
+                              variant="outlined"
+                              value={player.name}
+                              onChange={(e) => handleInputChange(e, player.id, 'name')}
+                              required
+                              sx={{ width: isMobile ? '100%' : '70%' }}
+                          />
+                          <TextField 
+                              select
+                              label="Size"
+                              value={player.size}
+                              onChange={(e) => handleInputChange(e, player.id, 'size')}
+                              variant="outlined"
+                              required
+                              sx={{ width: isMobile ? '100%' : '30%', mt: isMobile ? 2 : 0 }}
+                          >
+                              <MenuItem value="">Select Size</MenuItem>
+                              <MenuItem value="Big">Big</MenuItem>
+                              <MenuItem value="Small">Small</MenuItem>
+                          </TextField>
+                      </Box>
+                  ))}
+                  <Button variant="contained" onClick={handleNext}>
+                      Next
+                  </Button>
+              </Stack>
+          </Box>
       </Box>
-    </Container>
+  </Container>
   );
 };
 
 export default PlayerInputForm;
-
-
-
-
-
