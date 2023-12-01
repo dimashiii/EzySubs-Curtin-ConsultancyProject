@@ -282,11 +282,11 @@ const Game = () => {
               </Box>
           )}
 
-          <Box sx={{ maxHeight: 'calc(100vh - 300px)', overflow: 'auto'}}>
+          <Box sx={{ maxHeight: 'calc(100vh - 00px)', overflow: 'auto'}}>
 
             <Grid container spacing={3} sx={{ my: 2 }}>
                 <Grid item xs={12} sm={6}>
-                    <Typography variant="h6" gutterBottom>Current Players on the Court:</Typography>
+                    <Typography variant="h6" gutterBottom>Players on the Court:</Typography>
                     <Box>
                         {playersOnCourt.map((player, index) => (
                             <CommonButton

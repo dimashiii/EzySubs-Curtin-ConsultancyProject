@@ -13,19 +13,15 @@ const MinutesPerHalfInput = ({ onMinutesPerHalfSubmit }) => {
   };
 
   const handleInputChange = (e, field) => {
-    const newGameManagement = {...gameManagement}
-    console.log(`------newGameManagement------`, newGameManagement)
-    console.log(`------field------`, field)
+    const newGameManagement = { ...gameManagement };
     newGameManagement[field] = e.target.value;
-    console.log(`------newGameManagement after------`, newGameManagement)
-    dispatch(updateGameData(newGameManagement))
+    dispatch(updateGameData(newGameManagement));
   };
-  
 
   return (
     <div className="page-container">
       <div className="content-container">
-        <h1></h1>
+        <h1>Game Settings</h1>
         <form onSubmit={handleSubmit}>
           <h2></h2>
           <div className="input-container">
@@ -37,9 +33,19 @@ const MinutesPerHalfInput = ({ onMinutesPerHalfSubmit }) => {
               onChange={(e) => handleInputChange(e, 'minutesPerHalf')}
             />
           </div>
-          
+
           <div className="input-container">
-            <label htmlFor="playersPerSubstitution">Number of players per substitution:</label>
+            <label htmlFor="minutesToSubstitute">Alarm Interval:</label>
+            <input
+              type="number"
+              id="minutesToSubstitute"
+              value={minutesToSubstitute}
+              onChange={(e) => handleInputChange(e, 'minutesToSubstitute')}
+            />
+          </div>
+
+          <div className="input-container">
+            <label htmlFor="playersPerSubstitution">Players per substitution:</label>
             <input
               type="number"
               id="playersPerSubstitution"
@@ -55,3 +61,4 @@ const MinutesPerHalfInput = ({ onMinutesPerHalfSubmit }) => {
 };
 
 export default MinutesPerHalfInput;
+
