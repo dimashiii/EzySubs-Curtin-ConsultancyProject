@@ -13,6 +13,12 @@ const Game = () => {
   const [timer, setTimer] = useState(minutesPerHalfData.minutesPerHalf * 60); 
   const [playerStatistics, setPlayerStatistics] = useState([]);
 
+  const [showStatistics, setShowStatistics] = useState(false);
+
+  const handleShowStatistics = () => {
+    setShowStatistics((prevShowStatistics) => !prevShowStatistics);
+  };
+  
   const handleRestartApp = () => {
     // Reload the entire page to restart the app
     window.location.reload();
@@ -322,6 +328,7 @@ const Game = () => {
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', my: 2 }}>
                         <Button variant="outlined" onClick={handleSelectSubs}>Select Subs</Button>
                         <Button variant="contained" onClick={updateSubs}>Update Subs</Button>
+                        <Button variant="contained" onClick={handleShowStatistics}>Statistics</Button>
                     </Box>
                 </Box>
             )}
@@ -330,31 +337,34 @@ const Game = () => {
                 <Button variant="contained" onClick={handleStartGame} size="large">Start Game</Button>
             )}
 
-            <Box sx={{ width: '100%', overflowX: 'auto', my: 2 }}>
+            {/* Conditionally render player statistics section */}
+            {showStatistics && gameStarted && (
+              <Box sx={{ width: '100%', overflowX: 'auto', my: 2 }}>
                 <Typography variant="h5" gutterBottom>Player Statistics</Typography>
                 <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>Player Name</TableCell>
-                            <TableCell>Minutes on Court</TableCell>
-                            <TableCell>Substitutions</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {playersData.map((player, index) => (
-                            <TableRow key={index}>
-                                <TableCell>{player.name}</TableCell>
-                                <TableCell>{formatTime(playerTimers[player.name] || 0)}</TableCell>
-                                <TableCell>{(playersOnCourt.find((p) => p.name === player.name)?.substitutions || 0) +
-                                    (playersOnBench.find((p) => p.name === player.name)?.substitutions || 0)}</TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Player Name</TableCell>
+                      <TableCell>Minutes on Court</TableCell>
+                      <TableCell>Substitutions</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {playersData.map((player, index) => (
+                      <TableRow key={index}>
+                        <TableCell>{player.name}</TableCell>
+                        <TableCell>{formatTime(playerTimers[player.name] || 0)}</TableCell>
+                        <TableCell>{(playersOnCourt.find((p) => p.name === player.name)?.substitutions || 0) +
+                          (playersOnBench.find((p) => p.name === player.name)?.substitutions || 0)}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
                 </Table>
-            </Box>
-         </Box>
-      </Box>
-  </Container>
+              </Box>
+            )}
+          </Box>
+        </Box>
+      </Container>
   );
 };
 
