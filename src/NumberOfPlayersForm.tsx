@@ -34,7 +34,7 @@ const NumberOfPlayersForm = ({ onNext }) => {
     <Container className="page-container"> {/* Use the page-container class for consistent styling */}
       <Box className="content-container"> {/* Use the content-container class for consistent styling */}
         <Typography variant="h4" component="h2" gutterBottom>
-          Enter the number of players on the team:
+          Number of players:
         </Typography>
         <form onSubmit={handleSubmit}>
           
