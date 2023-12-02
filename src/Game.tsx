@@ -188,25 +188,31 @@ const Game = () => {
 
   useEffect(() => {
     let countdown;
-
+    const minutesToSubstitute = minutesPerHalfData.minutesToSubstitute; // Declare minutesToSubstitute here
+  
     if (gameStarted && timer > 0) {
       countdown = setInterval(() => {
-        setTimer(prevTimer => prevTimer - 1);
-
+        setTimer((prevTimer) => prevTimer - 1);
+  
         // Update player timers for players on the court
         const updatedPlayerTimers = { ...playerTimers };
-        playersOnCourt.forEach(player => {
+        playersOnCourt.forEach((player) => {
           updatedPlayerTimers[player.name] = (updatedPlayerTimers[player.name] || 0) + 1;
         });
         setPlayerTimers(updatedPlayerTimers);
+  
+        // Play the alarm sound every specified minutesToSubstitute minutes
+        if (timer % (minutesToSubstitute * 60) === 0) {
+          alarmRef.current.play();
+        }
       }, 1000);
     } else if (timer === 0) {
       clearInterval(countdown);
     }
-
+  
     return () => clearInterval(countdown);
-  }, [gameStarted, timer, playerTimers, playersOnCourt]);
-
+  }, [gameStarted, timer, playerTimers, playersOnCourt, minutesPerHalfData.minutesToSubstitute]);
+  
   const handleSelectSubs = () => {
     const numSubstitutions = minutesPerHalfData.playersPerSubstitution;
     const substitutedPlayers = [];
