@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import './Game.css';
 import { useAppSelector } from './app/store';
 import { Container, Box, Typography, Button, Grid, Table, TableHead, TableRow, TableCell, TableBody, Stack } from '@mui/material';
+import { useRef } from 'react';
+import alarmSound from './alarm.wav';
+import './declarations.d.ts';
 
 const Game = () => {
   const playersData = useAppSelector(state => state.players.players);
@@ -12,8 +15,10 @@ const Game = () => {
   const [lastSubstitution, setLastSubstitution] = useState([]);
   const [timer, setTimer] = useState(minutesPerHalfData.minutesPerHalf * 60); 
   const [playerStatistics, setPlayerStatistics] = useState([]);
-
   const [showStatistics, setShowStatistics] = useState(false);
+
+  const alarmRef = useRef(new Audio(alarmSound));
+  
 
   const handleShowStatistics = () => {
     setShowStatistics((prevShowStatistics) => !prevShowStatistics);
@@ -221,7 +226,7 @@ const Game = () => {
 
         if (!excludedPlayers.includes(courtPlayerToSubstitute)) {
           substitutedPlayers.push(
-            `Substitute ${benchPlayerToSubstitute.name} for ${courtPlayerToSubstitute.name}`
+            `${benchPlayerToSubstitute.name} ON ${courtPlayerToSubstitute.name} OFF`
           );
 
           updatedCourt.splice(randomCourtIndex, 1);
