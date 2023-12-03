@@ -49,12 +49,13 @@ const Game = () => {
 
   // Button component with common styling
   const CommonButton = ({ player, onClick, isExcluded }) => {
+    const playerNameWithSuffix = `${player.name} ${player.size === 'Big' ? '(b)' : '(s)'}`;
     return (
       <button
         onClick={() => onClick(player)}
         className={`common-button ${isExcluded ? 'excluded' : 'rest'}`}
       >
-        {player.name} {isExcluded ? "II" : "▶"}
+        {playerNameWithSuffix} {isExcluded ? "II" : "▶"}
       </button>
     );
   };
