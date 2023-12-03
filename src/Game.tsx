@@ -233,12 +233,12 @@ const Game = () => {
         const randomBenchIndex = Math.floor(Math.random() * availableBenchPlayers.length);
         const courtPlayerToSubstitute = updatedCourt[randomCourtIndex];
         const benchPlayerToSubstitute = availableBenchPlayers[randomBenchIndex];
-
+  
         if (!excludedPlayers.includes(courtPlayerToSubstitute)) {
           substitutedPlayers.push(
             `Substitute ${benchPlayerToSubstitute.name} for ${courtPlayerToSubstitute.name}`
           );
-
+  
           updatedCourt.splice(randomCourtIndex, 1);
           availableBenchPlayers.splice(randomBenchIndex, 1);
         }
@@ -251,6 +251,13 @@ const Game = () => {
   const handleEmergencySubstitution = (injuredPlayer) => {
     const randomBenchIndex = Math.floor(Math.random() * playersOnBench.length);
     const substitutePlayer = playersOnBench[randomBenchIndex];
+
+      // Check if the substitute player is excluded
+    if (excludedPlayers.includes(substitutePlayer)) {
+      // Retry the substitution if the substitute player is excluded
+      handleEmergencySubstitution(injuredPlayer);
+      return;
+    }
   
     const updatedPlayersOnCourt = [...playersOnCourt];
     const updatedPlayersOnBench = [...playersOnBench];
