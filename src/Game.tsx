@@ -105,8 +105,27 @@ const Game = () => {
       }
     });
 
-    return players;
-  };
+    // Ensure balance of big and small players
+  const numBigPlayers = Math.max(2, Math.floor(num / 3)); // Ensure at least 2 big players
+  const numSmallPlayers = num - numBigPlayers;
+
+  let bigPlayersOnCourt = 0;
+  let smallPlayersOnCourt = 0;
+
+  players.forEach((player) => {
+    if (player.size === 'Big' && bigPlayersOnCourt < numBigPlayers) {
+      player.isSubstituted = false; // Set as not substituted
+      bigPlayersOnCourt++;
+    } else if (player.size === 'Small' && smallPlayersOnCourt < numSmallPlayers) {
+      player.isSubstituted = false; // Set as not substituted
+      smallPlayersOnCourt++;
+    } else {
+      player.isSubstituted = true; // Set as substituted for extra players
+    }
+  });
+
+  return players;
+};
 
   const initializeStartingLineup = (players) => {
     const maxPlayersOnCourt = Math.min(5, players.length);
