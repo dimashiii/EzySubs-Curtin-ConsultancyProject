@@ -6,6 +6,7 @@ import { useRef } from 'react';
 import alarmSound from './alarm.wav';
 import './declarations.d.ts';
 
+
 const Game = () => {
   const playersData = useAppSelector(state => state.players.players);
   const minutesPerHalfData = useAppSelector(state => state.gameManagement);
@@ -15,10 +16,11 @@ const Game = () => {
   const [lastSubstitution, setLastSubstitution] = useState([]);
   const [timer, setTimer] = useState(minutesPerHalfData.minutesPerHalf * 60); 
   const [playerStatistics, setPlayerStatistics] = useState([]);
+
   const [showStatistics, setShowStatistics] = useState(false);
+  const minutesToSubstitute = minutesPerHalfData.minutesToSubstitute; // Declare minutesToSubstitute here
 
   const alarmRef = useRef(new Audio(alarmSound));
-  
 
   const handleShowStatistics = () => {
     setShowStatistics((prevShowStatistics) => !prevShowStatistics);
@@ -188,31 +190,33 @@ const Game = () => {
 
   useEffect(() => {
     let countdown;
-    const minutesToSubstitute = minutesPerHalfData.minutesToSubstitute; // Declare minutesToSubstitute here
-  
+
+    // Play the alarm sound every specified minutesToSubstitute minutes
+    if (timer % (minutesToSubstitute * 60) === 0) {
+      alarmRef.current.play();
+    }
+
     if (gameStarted && timer > 0) {
       countdown = setInterval(() => {
-        setTimer((prevTimer) => prevTimer - 1);
-  
+        setTimer(prevTimer => prevTimer - 1);
+
         // Update player timers for players on the court
         const updatedPlayerTimers = { ...playerTimers };
-        playersOnCourt.forEach((player) => {
+        playersOnCourt.forEach(player => {
           updatedPlayerTimers[player.name] = (updatedPlayerTimers[player.name] || 0) + 1;
         });
         setPlayerTimers(updatedPlayerTimers);
-  
-        // Play the alarm sound every specified minutesToSubstitute minutes
-        if (timer % (minutesToSubstitute * 60) === 0) {
-          alarmRef.current.play();
-        }
       }, 1000);
     } else if (timer === 0) {
       clearInterval(countdown);
     }
-  
+
     return () => clearInterval(countdown);
   }, [gameStarted, timer, playerTimers, playersOnCourt, minutesPerHalfData.minutesToSubstitute]);
-  
+
+
+
+
   const handleSelectSubs = () => {
     const numSubstitutions = minutesPerHalfData.playersPerSubstitution;
     const substitutedPlayers = [];
@@ -232,7 +236,7 @@ const Game = () => {
 
         if (!excludedPlayers.includes(courtPlayerToSubstitute)) {
           substitutedPlayers.push(
-            `${benchPlayerToSubstitute.name} ON ${courtPlayerToSubstitute.name} OFF`
+            `Substitute ${benchPlayerToSubstitute.name} for ${courtPlayerToSubstitute.name}`
           );
 
           updatedCourt.splice(randomCourtIndex, 1);
@@ -293,11 +297,11 @@ const Game = () => {
               </Box>
           )}
 
-          <Box sx={{ maxHeight: 'calc(100vh - 00px)', overflow: 'auto'}}>
+          <Box sx={{ maxHeight: 'calc(100vh - 300px)', overflow: 'auto'}}>
 
             <Grid container spacing={3} sx={{ my: 2 }}>
                 <Grid item xs={12} sm={6}>
-                    <Typography variant="h6" gutterBottom>Players on the Court:</Typography>
+                    <Typography variant="h6" gutterBottom> Players on the Court:</Typography>
                     <Box>
                         {playersOnCourt.map((player, index) => (
                             <CommonButton
