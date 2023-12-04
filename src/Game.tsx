@@ -324,103 +324,109 @@ const Game = () => {
   return (
     <Container className="page-container" maxWidth="lg">
       <Box className="content-container" sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-          <Typography variant="h4" gutterBottom>Game Information</Typography>
+        <Typography variant="h4" gutterBottom>Game Information</Typography>
 
-          {gameStarted && (
-              <Box sx={{ textAlign: 'center', mb: 4 }}>
-                  <Typography className="timer-value red big" component="span" variant="h6">{formatTime(timer)}</Typography>
-                  <Stack direction="row" spacing={2} sx={{ my: 2 }}>
-                  <Box sx={{ my: 2 }}>
-                      <Button variant="outlined" onClick={handleRestartTimer}>Reset Time</Button>
-                  </Box>
-                      <Button variant="contained" onClick={handleRestartApp}>Start Again</Button>
-                  </Stack>
+        {gameStarted && (
+          <Box sx={{ textAlign: 'center', mb: 4 }}>
+            <Typography className="timer-value red big" component="span" variant="h6">{formatTime(timer)}</Typography>
+            <Stack direction="row" spacing={2} sx={{ my: 2 }}>
+              <Box sx={{ my: 2 }}>
+                <Button variant="outlined" onClick={handleRestartTimer}>Reset Time</Button>
               </Box>
-          )}
+              <Button variant="contained" onClick={handleRestartApp}>Start Again</Button>
+            </Stack>
+          </Box>
+        )}
 
-          <Box sx={{ maxHeight: 'calc(100vh - 300px)', overflow: 'auto'}}>
-
-            <Grid container spacing={3} sx={{ my: 2 }}>
-                <Grid item xs={12} sm={6}>
-                    <Typography variant="h6" gutterBottom> Players on the Court:</Typography>
-                    <Box>
-                        {playersOnCourt.map((player, index) => (
-                            <CourtButton
-                                key={index}
-                                player={player}
-                                onClick={handleEmergencySubstitution}
-                                isExcluded={excludedPlayers.includes(player)}
-                            />
-                        ))}
-                    </Box>
-                </Grid>
-
-                <Grid item xs={12} sm={6}>
-                    <Typography variant="h6" gutterBottom>Players on the Bench:</Typography>
-                    <Box component="ul">
-                        {playersOnBench.map((player, index) => (
-                            <li key={index}>
-                                <BenchButton
-                                    player={player}
-                                    onClick={togglePlayerExclusion}
-                                    isExcluded={excludedPlayers.includes(player)}
-                                />
-                            </li>
-                        ))}
-                    </Box>
-                </Grid>
+        <Box sx={{ maxHeight: 'calc(100vh - 300px)', overflow: 'auto' }}>
+          <Grid container spacing={3} sx={{ my: 2 }}>
+            <Grid item xs={12} sm={6}>
+              <Typography variant="h6" gutterBottom> Players on the Court:</Typography>
+              <Box>
+                {playersOnCourt.map((player, index) => (
+                  <CourtButton
+                    key={index}
+                    player={player}
+                    onClick={handleEmergencySubstitution}
+                    isExcluded={excludedPlayers.includes(player)}
+                  />
+                ))}
+              </Box>
             </Grid>
 
-            {gameStarted && (
-                <Box sx={{ my: 2 }}>
-                    <Typography variant="h5" gutterBottom>Substitutions</Typography>
-                    {lastSubstitution && lastSubstitution.length > 0 && (
-                        <Box component="ul">
-                            {lastSubstitution.map((pair, pairIndex) => (
-                                <li key={pairIndex}>{pair}</li>
-                            ))}
-                        </Box>
-                    )}
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', my: 2 }}>
-                        <Button variant="outlined" onClick={handleSelectSubs}>Select Subs</Button>
-                        <Button variant="contained" onClick={updateSubs}>Update Subs</Button>
-                        <Button variant="contained" onClick={handleShowStatistics}>Statistics</Button>
-                    </Box>
-                </Box>
-            )}
-
-            {!gameStarted && (
-                <Button variant="contained" onClick={handleStartGame} size="large">Start Game</Button>
-            )}
-
-            {/* Conditionally render player statistics section */}
-            {showStatistics && gameStarted && (
-              <Box sx={{ width: '100%', overflowX: 'auto', my: 2 }}>
-                <Typography variant="h5" gutterBottom>Player Statistics</Typography>
-                <Table>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>Player Name</TableCell>
-                      <TableCell>Minutes on Court</TableCell>
-                      <TableCell>Substitutions</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {playersData.map((player, index) => (
-                      <TableRow key={index}>
-                        <TableCell>{player.name}</TableCell>
-                        <TableCell>{formatTime(playerTimers[player.name] || 0)}</TableCell>
-                        <TableCell>{(playersOnCourt.find((p) => p.name === player.name)?.substitutions || 0) +
-                          (playersOnBench.find((p) => p.name === player.name)?.substitutions || 0)}</TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
+            <Grid item xs={12} sm={6}>
+              <Typography variant="h6" gutterBottom>Players on the Bench:</Typography>
+              <Box component="ul">
+                {playersOnBench.map((player, index) => (
+                  <li key={index}>
+                    <BenchButton
+                      player={player}
+                      onClick={togglePlayerExclusion}
+                      isExcluded={excludedPlayers.includes(player)}
+                    />
+                  </li>
+                ))}
               </Box>
-            )}
-          </Box>
+            </Grid>
+          </Grid>
+
+          {gameStarted && (
+            <Box sx={{ my: 2 }}>
+              <Typography variant="h5" gutterBottom>Substitutions</Typography>
+              {lastSubstitution && lastSubstitution.length > 0 && (
+                <Box component="ul">
+                  {lastSubstitution.map((pair, pairIndex) => (
+                    <li key={pairIndex}>{pair}</li>
+                  ))}
+                </Box>
+              )}
+              <Stack direction="row" spacing={4} sx={{ my: 2, display: 'flex', justifyContent: 'center' }}>
+                <Button variant="outlined" onClick={handleSelectSubs}>Select Subs</Button>
+                <Button variant="contained" onClick={updateSubs}>Update Subs</Button>
+              </Stack>
+
+              
+
+
+
+              <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                <Button variant="contained" onClick={handleShowStatistics}>Statistics</Button>
+              </Box>
+            </Box>
+          )}
+
+          {!gameStarted && (
+            <Button variant="contained" onClick={handleStartGame} size="large">Start Game</Button>
+          )}
+
+          {/* Conditionally render player statistics section */}
+          {showStatistics && gameStarted && (
+            <Box sx={{ width: '100%', overflowX: 'auto', my: 2 }}>
+              <Typography variant="h5" gutterBottom>Player Statistics</Typography>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Player Name</TableCell>
+                    <TableCell>Minutes on Court</TableCell>
+                    <TableCell>Substitutions</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {playersData.map((player, index) => (
+                    <TableRow key={index}>
+                      <TableCell>{player.name}</TableCell>
+                      <TableCell>{formatTime(playerTimers[player.name] || 0)}</TableCell>
+                      <TableCell>{(playersOnCourt.find((p) => p.name === player.name)?.substitutions || 0) +
+                        (playersOnBench.find((p) => p.name === player.name)?.substitutions || 0)}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </Box>
+          )}
         </Box>
-      </Container>
+      </Box>
+    </Container>
   );
 };
 
