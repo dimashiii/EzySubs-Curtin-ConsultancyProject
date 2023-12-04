@@ -189,7 +189,7 @@ const Game = () => {
   
         // Increment substitutions count for both the substituted player and the substitute player
         originalPlayer.substitutions++;
-        substitutePlayer.substitutions++;
+        
       }
     });
   
@@ -291,7 +291,7 @@ const Game = () => {
   
       // Increment substitutions count for the substituted player and the substitute player
       injuredPlayer.substitutions++;
-      substitutePlayer.substitutions++;
+      
   
       setPlayersOnCourt(updatedPlayersOnCourt);
       setPlayersOnBench(updatedPlayersOnBench);
