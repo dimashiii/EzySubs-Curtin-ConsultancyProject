@@ -1,5 +1,3 @@
-// Your PlayerInputForm component
-
 import React, { useMemo, useState } from 'react';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
@@ -36,8 +34,11 @@ const PlayerInputForm = ({ onNext }) => {
     dispatch(updatePlayer(newPlayer));
   };
 
-  const handleDeletePlayer = (playerId) => {
-    dispatch(deletePlayer(playerId));
+  const handleDeleteLastPlayer = () => {
+    const lastPlayerId = players[players.length - 1]?.id;
+    if (lastPlayerId) {
+      dispatch(deletePlayer(lastPlayerId));
+    }
   };
 
   const handleAddPlayer = () => {
@@ -81,7 +82,8 @@ const PlayerInputForm = ({ onNext }) => {
                   value={player.name}
                   onChange={(e) => handleInputChange(e, player.id, 'name')}
                   required
-                  sx={{ width: isMobile ? '100%' : '70%' }}
+                  sx={{ width: isMobile ? '100%' : '70%', border: 1, borderColor: 'primary.main', borderRadius: 1, marginBottom: 2 }}
+                  
                 />
                 <TextField
                   select
@@ -90,24 +92,29 @@ const PlayerInputForm = ({ onNext }) => {
                   onChange={(e) => handleInputChange(e, player.id, 'size')}
                   variant="outlined"
                   required
-                  sx={{ width: isMobile ? '100%' : '30%', mt: isMobile ? 2 : 0, ml: 2 }}
+                  sx={{ width: isMobile ? '100%' : '30%', mt: isMobile ? 2 : 0, ml: 2, border: 1, borderColor: 'primary.main', borderRadius: 1, marginBottom: 2 }}
+
+                  
                 >
                   <MenuItem value="">Select Size</MenuItem>
                   <MenuItem value="Big">Big</MenuItem>
                   <MenuItem value="Small">Small</MenuItem>
                 </TextField>
-                <Button variant="outlined" sx={{ ml: 2 }} onClick={() => handleDeletePlayer(player.id)}>
-                  x
-                </Button>
               </Box>
             ))}
             
-            <Button variant="outlined" sx={{ ml: 2 }} onClick={handleAddPlayer}>
-              ADD
-            </Button>
-            <Button variant="contained" onClick={handleNext}>
-              Save/Next
-            </Button>
+            <Stack direction="column" spacing={2}>
+              <Button variant="outlined" sx={{ width: '100%' }} onClick={handleAddPlayer}>
+              
+                ADD
+              </Button>
+              <Button variant="outlined" sx={{ width: '100%' }} onClick={handleDeleteLastPlayer}>
+                Remove
+              </Button>
+              <Button variant="contained" sx={{ width: '100%' }} onClick={handleNext}>
+                Save/Next
+              </Button>
+            </Stack>
           </Stack>
         </Box>
       </Box>
@@ -116,6 +123,8 @@ const PlayerInputForm = ({ onNext }) => {
 };
 
 export default PlayerInputForm;
+
+
 
 
 

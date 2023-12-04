@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import Link from '@mui/material/Link';
+import Button from '@mui/material/Button'; // Import Button from MUI
 import Stack from '@mui/material/Stack';
+import Link from '@mui/material/Link';
 import Item from '@mui/material/Box';
 
 const HomeScreen = ({ onStart }) => {
@@ -14,21 +15,26 @@ const HomeScreen = ({ onStart }) => {
   };
 
   return (
-    <Container className="page-container"> 
+    <Container className="page-container">
       <Box className="content-container">
         <Stack spacing={2}>
           <Typography variant='h3'>Ezy Subs</Typography>
-            <button onClick={onStart} className="start-button">
-              Start Game
-            </button>
-            <Link onClick={toggleInstructions}>
-              Instructions
-            </Link>
+          
+          {/* Use MUI Button for a consistent style */}
+          <Button onClick={onStart} variant="contained" color="primary">
+            Start Game
+          </Button>
+          
+          {/* Use MUI Button for a consistent style */}
+          <Link onClick={toggleInstructions} component="button">
+            Instructions
+          </Link>
+          
           {showInstructions && (
             <>
               <Typography variant='h4'>How To</Typography>
 
-              <Box sx={{ maxHeight:300, overflow: 'auto'}}>
+              <Box sx={{ maxHeight: 300, overflow: 'auto' }}>
                 <Stack spacing={2}>
                   <Item>
                     <Typography align='left' variant='h5'>Number of Players Screen</Typography>
@@ -72,6 +78,7 @@ const HomeScreen = ({ onStart }) => {
 };
 
 export default HomeScreen;
+
 
 
 

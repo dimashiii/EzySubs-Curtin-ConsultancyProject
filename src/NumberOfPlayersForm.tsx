@@ -3,7 +3,7 @@ import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Input from '@mui/material/Input';
-import Button from '@mui/material/Button';
+import Button from '@mui/material/Button'; // Import Button from MUI
 import { useAppDispatch } from './app/store';
 import { createPlayers } from './app/features/playerData/playersSlice';
 
@@ -16,15 +16,9 @@ const NumberOfPlayersForm = ({ onNext }) => {
   }
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-
-    if (numPlayers >= 6) {
-      createNewPlayers(numPlayers);
-      onNext(10);
-    } else {
-      // Display an error message or prevent the form submission
-      alert('Minimum allowable players is 6. Please enter a valid number.');
-    }
+    e.preventDefault(); // Prevent default form submission behavior
+    createNewPlayers(numPlayers);
+    onNext(10);
   };
 
   const createNewPlayers = (playersCount) => {
@@ -34,9 +28,9 @@ const NumberOfPlayersForm = ({ onNext }) => {
       size: '',
       id: index,
     }));
-    console.log('players: ', newPlayers)
+    console.log('players: ', newPlayers);
     dispatch(createPlayers(newPlayers));
-  }
+  };
 
   return (
     <Container className="page-container">
@@ -52,8 +46,9 @@ const NumberOfPlayersForm = ({ onNext }) => {
             value={numPlayers}
             onChange={handleAddPlayersCount}
             required
-            sx={{ width: 1, border: 1, borderColor: 'primary.main', borderRadius: 1 }}
+            sx={{ width: '80%', border: 1, borderColor: 'primary.main', borderRadius: 1, marginBottom: 2 }} // Adjusted width
           />
+          {/* Use MUI Button for consistent styling */}
           <Button type="submit" variant="contained" color="primary">
             Next
           </Button>
@@ -64,6 +59,8 @@ const NumberOfPlayersForm = ({ onNext }) => {
 };
 
 export default NumberOfPlayersForm;
+
+
 
 
 
