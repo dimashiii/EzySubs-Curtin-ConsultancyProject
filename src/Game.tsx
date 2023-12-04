@@ -47,13 +47,26 @@ const Game = () => {
     }
   };
 
-  // Button component with common styling
-  const CommonButton = ({ player, onClick, isExcluded }) => {
+    // CourtButton component
+  const CourtButton = ({ player, onClick, isExcluded }) => {
     const playerNameWithSuffix = `${player.name} ${player.size === 'Big' ? '(b)' : '(s)'}`;
     return (
       <button
         onClick={() => onClick(player)}
-        className={`common-button ${isExcluded ? 'excluded' : 'rest'}`}
+        className={`court-button ${isExcluded ? 'excluded' : 'rest'}`}
+      >
+        {playerNameWithSuffix} 
+      </button>
+    );
+  };
+
+  // BenchButton component
+  const BenchButton = ({ player, onClick, isExcluded }) => {
+    const playerNameWithSuffix = `${player.name} ${player.size === 'Big' ? '(b)' : '(s)'}`;
+    return (
+      <button
+        onClick={() => onClick(player)}
+        className={`bench-button ${isExcluded ? 'excluded' : 'rest'}`}
       >
         {playerNameWithSuffix} {isExcluded ? "II" : "▶"}
       </button>
@@ -332,7 +345,7 @@ const Game = () => {
                     <Typography variant="h6" gutterBottom> Players on the Court:</Typography>
                     <Box>
                         {playersOnCourt.map((player, index) => (
-                            <CommonButton
+                            <CourtButton
                                 key={index}
                                 player={player}
                                 onClick={handleEmergencySubstitution}
@@ -347,7 +360,7 @@ const Game = () => {
                     <Box component="ul">
                         {playersOnBench.map((player, index) => (
                             <li key={index}>
-                                <CommonButton
+                                <BenchButton
                                     player={player}
                                     onClick={togglePlayerExclusion}
                                     isExcluded={excludedPlayers.includes(player)}
