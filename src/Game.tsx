@@ -202,6 +202,7 @@ const Game = () => {
     setPlayersOnCourt(updatedPlayersOnCourt);
     setPlayersOnBench(updatedPlayersOnBench);
     setLastSubstitution(substitutedPlayers);
+    setLastSubstitution([]);
   };
 
   const handleStartGame = () => {
