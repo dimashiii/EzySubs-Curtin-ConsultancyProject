@@ -178,7 +178,7 @@ th {
   /* ... (previous styles) */
 
 /* Add these styles for the common buttons */
-.common-button {
+.court-button {
   background-color: #f38021;
   color: white;
   border: none;
@@ -189,5 +189,19 @@ th {
   margin: 8px;
   width: 70%;
 }
+
+.bench-button {
+  background-color: #f38021;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  padding: 10px 20px;
+  font-size: 20px;
+  margin: 8px;
+  width: 70%;
+}
+
+
 
 /* ... (other styles) */
