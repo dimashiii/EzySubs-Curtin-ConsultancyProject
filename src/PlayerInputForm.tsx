@@ -82,7 +82,7 @@ const PlayerInputForm = ({ onNext }) => {
                   value={player.name}
                   onChange={(e) => handleInputChange(e, player.id, 'name')}
                   required
-                  sx={{ width: isMobile ? '100%' : '70%', border: 1, borderColor: 'primary.main', borderRadius: 1, marginBottom: 2 }}
+                  sx={{ width: isMobile ? '100%' : '65%', border: 1, borderColor: 'primary.main', borderRadius: 1, marginBottom: 2 }}
                   
                 />
                 <TextField
@@ -92,13 +92,13 @@ const PlayerInputForm = ({ onNext }) => {
                   onChange={(e) => handleInputChange(e, player.id, 'size')}
                   variant="outlined"
                   required
-                  sx={{ width: isMobile ? '100%' : '30%', mt: isMobile ? 2 : 0, ml: 2, border: 1, borderColor: 'primary.main', borderRadius: 1, marginBottom: 2 }}
+                  sx={{ width: isMobile ? '100%' : '25%', mt: isMobile ? 2 : 0, ml: 2, border: 1, borderColor: 'primary.main', borderRadius: 1, marginBottom: 2 }}
 
                   
                 >
                   <MenuItem value="">Select Size</MenuItem>
                   <MenuItem value="Big">Big</MenuItem>
-                  <MenuItem value="Small">Small</MenuItem>
+                  <MenuItem value="Small">Sml</MenuItem>
                 </TextField>
               </Box>
             ))}

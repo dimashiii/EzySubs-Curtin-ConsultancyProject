@@ -381,8 +381,8 @@ const Game = () => {
                 </Box>
               )}
               <Stack direction="row" spacing={4} sx={{ my: 2, display: 'flex', justifyContent: 'center' }}>
-                <Button variant="outlined" onClick={handleSelectSubs}>Select Subs</Button>
-                <Button variant="contained" onClick={updateSubs}>Update Subs</Button>
+                <Button variant="outlined" onClick={handleSelectSubs}>Select</Button>
+                <Button variant="contained" onClick={updateSubs}>Update</Button>
               </Stack>
 
               
