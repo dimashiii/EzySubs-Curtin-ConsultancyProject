@@ -38,7 +38,7 @@ const MinutesPerHalfInput = ({ onMinutesPerHalfSubmit }) => {
               id="minutesPerHalf"
               value={minutesPerHalf}
               onChange={(e) => handleInputChange(e, 'minutesPerHalf')}
-              sx={{ width: '50%', border: 1, borderColor: 'primary.main', borderRadius: 1, marginBottom: 2 }} // Adjusted width
+              sx={{ width: '30%', border: 1, borderColor: 'primary.main', borderRadius: 1, marginBottom: 2 }} // Adjusted width
             />
           </div>
 
@@ -49,7 +49,7 @@ const MinutesPerHalfInput = ({ onMinutesPerHalfSubmit }) => {
               id="minutesToSubstitute"
               value={minutesToSubstitute}
               onChange={(e) => handleInputChange(e, 'minutesToSubstitute')}
-              sx={{ width: '50%', border: 1, borderColor: 'primary.main', borderRadius: 1, marginBottom: 2 }} // Adjusted width
+              sx={{ width: '30%', border: 1, borderColor: 'primary.main', borderRadius: 1, marginBottom: 2 }} // Adjusted width
             />
           </div>
 
@@ -60,7 +60,7 @@ const MinutesPerHalfInput = ({ onMinutesPerHalfSubmit }) => {
               id="playersPerSubstitution"
               value={playersPerSubstitution}
               onChange={(e) => handleInputChange(e, 'playersPerSubstitution')}
-              sx={{ width: '50%', border: 1, borderColor: 'primary.main', borderRadius: 1, marginBottom: 2 }} // Adjusted width
+              sx={{ width: '30%', border: 1, borderColor: 'primary.main', borderRadius: 1, marginBottom: 2 }} // Adjusted width
             />
           </div>
           <Button type="submit" variant="contained" color="primary" sx={{ marginTop: 2 }}>Next</Button>
