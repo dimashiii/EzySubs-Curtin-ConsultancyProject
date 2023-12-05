@@ -94,15 +94,10 @@ const Game = () => {
     setTimer(minutesPerHalfData.minutesPerHalf * 60);
   };
 
-  const initializePlayers = (num, miutesPerHalf) => {
-    let substitutionCount = 0;
-
+  const initializePlayers = (num, minutesPerHalf) => {
     const players = playersData.slice(0, num).map((player, index) => {
       const isSubstituted = index >= 5;
-      if (isSubstituted) {
-        
-      }
-
+  
       return {
         ...player,
         isSubstituted,
@@ -112,34 +107,28 @@ const Game = () => {
         injured: false,
       };
     });
-
-    players.forEach((player, index) => {
-      if (index < 5) {
-        player.substitutions = substitutionCount;
+  
+    // Ensure balance of big and small players
+    const numBigPlayers = Math.min(3, Math.floor(num / 2)); // Ensure at most 3 big players
+    const numSmallPlayers = num - numBigPlayers;
+  
+    let bigPlayersOnCourt = 0;
+    let smallPlayersOnCourt = 0;
+  
+    players.forEach((player) => {
+      if (player.size === 'Big' && bigPlayersOnCourt < numBigPlayers) {
+        player.isSubstituted = false; // Set as not substituted
+        bigPlayersOnCourt++;
+      } else if (player.size === 'Small' && smallPlayersOnCourt < numSmallPlayers) {
+        player.isSubstituted = false; // Set as not substituted
+        smallPlayersOnCourt++;
+      } else {
+        player.isSubstituted = true; // Set as substituted for extra players
       }
     });
-
-    // Ensure balance of big and small players
-  const numBigPlayers = Math.max(2, Math.floor(num / 3)); // Ensure at least 2 big players
-  const numSmallPlayers = num - numBigPlayers;
-
-  let bigPlayersOnCourt = 0;
-  let smallPlayersOnCourt = 0;
-
-  players.forEach((player) => {
-    if (player.size === 'Big' && bigPlayersOnCourt < numBigPlayers) {
-      player.isSubstituted = false; // Set as not substituted
-      bigPlayersOnCourt++;
-    } else if (player.size === 'Small' && smallPlayersOnCourt < numSmallPlayers) {
-      player.isSubstituted = false; // Set as not substituted
-      smallPlayersOnCourt++;
-    } else {
-      player.isSubstituted = true; // Set as substituted for extra players
-    }
-  });
-
-  return players;
-};
+  
+    return players;
+  };
 
   const initializeStartingLineup = (players) => {
     const maxPlayersOnCourt = Math.min(5, players.length);
