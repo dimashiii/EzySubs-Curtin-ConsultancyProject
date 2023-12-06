@@ -70,7 +70,7 @@ const PlayerInputForm = ({ onNext }) => {
                 sx={{
                   display: 'flex',
                   flexDirection: isMobile ? 'column' : 'row',
-                  alignItems: 'center',
+                  
                   width: '100%'
                 }}
               >
@@ -82,7 +82,7 @@ const PlayerInputForm = ({ onNext }) => {
                   value={player.name}
                   onChange={(e) => handleInputChange(e, player.id, 'name')}
                   required
-                  sx={{ width: isMobile ? '100%' : '65%', border: 1, borderColor: 'primary.main', borderRadius: 1, marginBottom: 2 }}
+                  sx={{ width: isMobile ? '100%' : '50%', border: 1, borderColor: 'primary.main', borderRadius: 1, marginBottom: 2, textAlign: 'left'}}
                   
                 />
                 <TextField
