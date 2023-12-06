@@ -346,7 +346,7 @@ const Game = () => {
                 onClick={handleRestartTimer}
                 sx={{ my: 2 }}
               >
-                Reset Time
+                Reset 
               </Button>
               <Button
                 variant="contained"
