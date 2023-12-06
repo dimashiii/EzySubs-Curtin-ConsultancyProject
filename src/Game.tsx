@@ -6,31 +6,31 @@ import { useRef } from 'react';
 import alarmSound from './alarm.wav';
 import './declarations.d.ts';
 
-
 const Game = () => {
-  const playersData = useAppSelector(state => state.players.players);
-  const minutesPerHalfData = useAppSelector(state => state.gameManagement);
+  const playersData = useAppSelector((state) => state.players.players);
+  const minutesPerHalfData = useAppSelector((state) => state.gameManagement);
   const [playersOnCourt, setPlayersOnCourt] = useState([]);
   const [playersOnBench, setPlayersOnBench] = useState([]);
   const [gameStarted, setGameStarted] = useState(false);
   const [lastSubstitution, setLastSubstitution] = useState([]);
-  const [timer, setTimer] = useState(minutesPerHalfData.minutesPerHalf * 60); 
+  const [timer, setTimer] = useState(minutesPerHalfData.minutesPerHalf * 60);
   const [playerStatistics, setPlayerStatistics] = useState([]);
-
   const [showStatistics, setShowStatistics] = useState(false);
-  const minutesToSubstitute = minutesPerHalfData.minutesToSubstitute; // Declare minutesToSubstitute here
+  const [minutesToSubstitute, setMinutesToSubstitute] = useState(
+    minutesPerHalfData.minutesToSubstitute
+  ); // Declare minutesToSubstitute here
+  const [isTimerPaused, setIsTimerPaused] = useState(false);
 
   const alarmRef = useRef(new Audio(alarmSound));
 
   const handleShowStatistics = () => {
     setShowStatistics((prevShowStatistics) => !prevShowStatistics);
   };
-  
+
   const handleRestartApp = () => {
     // Reload the entire page to restart the app
     window.location.reload();
   };
-  
 
   // Create state to track player exclusion
   const [excludedPlayers, setExcludedPlayers] = useState([]);
@@ -47,28 +47,32 @@ const Game = () => {
     }
   };
 
-    // CourtButton component
+  // CourtButton component
   const CourtButton = ({ player, onClick, isExcluded }) => {
-    const playerNameWithSuffix = `${player.name} ${player.size === 'Big' ? '(b)' : '(s)'}`;
+    const playerNameWithSuffix = `${player.name} ${
+      player.size === 'Big' ? '(b)' : '(s)'
+    }`;
     return (
       <button
         onClick={() => onClick(player)}
         className={`court-button ${isExcluded ? 'excluded' : 'rest'}`}
       >
-        {playerNameWithSuffix} 
+        {playerNameWithSuffix}
       </button>
     );
   };
 
   // BenchButton component
   const BenchButton = ({ player, onClick, isExcluded }) => {
-    const playerNameWithSuffix = `${player.name} ${player.size === 'Big' ? '(b)' : '(s)'}`;
+    const playerNameWithSuffix = `${player.name} ${
+      player.size === 'Big' ? '(b)' : '(s)'
+    }`;
     return (
       <button
         onClick={() => onClick(player)}
         className={`bench-button ${isExcluded ? 'excluded' : 'rest'}`}
       >
-        {playerNameWithSuffix} {isExcluded ? "II" : "▶"}
+        {playerNameWithSuffix} {isExcluded ? 'II' : '▶'}
       </button>
     );
   };
@@ -97,7 +101,7 @@ const Game = () => {
   const initializePlayers = (num, minutesPerHalf) => {
     const players = playersData.slice(0, num).map((player, index) => {
       const isSubstituted = index >= 5;
-  
+
       return {
         ...player,
         isSubstituted,
@@ -107,14 +111,14 @@ const Game = () => {
         injured: false,
       };
     });
-  
+
     // Ensure balance of big and small players
     const numBigPlayers = Math.min(3, Math.floor(num / 2)); // Ensure at most 3 big players
     const numSmallPlayers = num - numBigPlayers;
-  
+
     let bigPlayersOnCourt = 0;
     let smallPlayersOnCourt = 0;
-  
+
     players.forEach((player) => {
       if (player.size === 'Big' && bigPlayersOnCourt < numBigPlayers) {
         player.isSubstituted = false; // Set as not substituted
@@ -126,7 +130,7 @@ const Game = () => {
         player.isSubstituted = true; // Set as substituted for extra players
       }
     });
-  
+
     return players;
   };
 
@@ -138,15 +142,20 @@ const Game = () => {
   };
 
   useEffect(() => {
-    const initialPlayers = initializePlayers(playersData.length, minutesPerHalfData.minutesPerHalf);
+    const initialPlayers = initializePlayers(
+      playersData.length,
+      minutesPerHalfData.minutesPerHalf
+    );
     const initialStartingLineup = initializeStartingLineup(initialPlayers);
 
     setPlayersOnCourt([...initialStartingLineup]);
-    setPlayersOnBench([...initialPlayers.filter(player => !initialStartingLineup.includes(player))]);
+    setPlayersOnBench([
+      ...initialPlayers.filter((player) => !initialStartingLineup.includes(player)),
+    ]);
 
     // Initialize player timers
     const timers = {};
-    initialPlayers.forEach(player => {
+    initialPlayers.forEach((player) => {
       timers[player.name] = 0;
     });
     setPlayerTimers(timers);
@@ -165,22 +174,22 @@ const Game = () => {
     const updatedPlayersOnCourt = [...playersOnCourt];
     const updatedPlayersOnBench = [...playersOnBench];
     const substitutedPlayers = [];
-  
+
     lastSubstitution.forEach((substitutionInfo) => {
       const [substituteName, originalPlayerName] = substitutionInfo
         .replace('Substitute ', '')
         .split(' for ');
-  
+
       const substitutePlayer = updatedPlayersOnBench.find(
         (player) => player.name === substituteName
       );
       const originalPlayer = updatedPlayersOnCourt.find(
         (player) => player.name === originalPlayerName
       );
-  
+
       if (substitutePlayer && originalPlayer) {
         substitutedPlayers.push(substitutionInfo);
-  
+
         // Update the players on the court and bench
         updatedPlayersOnCourt[
           updatedPlayersOnCourt.indexOf(originalPlayer)
@@ -188,19 +197,18 @@ const Game = () => {
         updatedPlayersOnBench[
           updatedPlayersOnBench.indexOf(substitutePlayer)
         ] = originalPlayer;
-  
+
         // Increment substitutions count for both the substituted player and the substitute player
         originalPlayer.substitutions++;
-        
       }
     });
-  
+
     while (updatedPlayersOnCourt.length < 5 && updatedPlayersOnBench.length > 0) {
       const substitutePlayer = updatedPlayersOnBench.shift();
       substitutePlayer.substitutions = 0; // Reset the substitution count to 0
       updatedPlayersOnCourt.push(substitutePlayer);
     }
-  
+
     setPlayersOnCourt(updatedPlayersOnCourt);
     setPlayersOnBench(updatedPlayersOnBench);
     setLastSubstitution(substitutedPlayers);
@@ -211,6 +219,10 @@ const Game = () => {
     setGameStarted(true);
   };
 
+  const handlePauseResumeTimer = () => {
+    setIsTimerPaused((prevIsTimerPaused) => !prevIsTimerPaused);
+  };
+
   useEffect(() => {
     let countdown;
 
@@ -219,26 +231,30 @@ const Game = () => {
       alarmRef.current.play();
     }
 
-    if (gameStarted && timer > 0) {
+    if (gameStarted && timer > 0 && !isTimerPaused) {
       countdown = setInterval(() => {
-        setTimer(prevTimer => prevTimer - 1);
+        setTimer((prevTimer) => prevTimer - 1);
 
         // Update player timers for players on the court
         const updatedPlayerTimers = { ...playerTimers };
-        playersOnCourt.forEach(player => {
+        playersOnCourt.forEach((player) => {
           updatedPlayerTimers[player.name] = (updatedPlayerTimers[player.name] || 0) + 1;
         });
         setPlayerTimers(updatedPlayerTimers);
       }, 1000);
-    } else if (timer === 0) {
+    } else if (timer === 0 || isTimerPaused) {
       clearInterval(countdown);
     }
 
     return () => clearInterval(countdown);
-  }, [gameStarted, timer, playerTimers, playersOnCourt, minutesPerHalfData.minutesToSubstitute]);
-
-
-
+  }, [
+    gameStarted,
+    timer,
+    playerTimers,
+    playersOnCourt,
+    minutesPerHalfData.minutesToSubstitute,
+    isTimerPaused,
+  ]);
 
   const handleSelectSubs = () => {
     const numSubstitutions = minutesPerHalfData.playersPerSubstitution;
@@ -256,12 +272,12 @@ const Game = () => {
         const randomBenchIndex = Math.floor(Math.random() * availableBenchPlayers.length);
         const courtPlayerToSubstitute = updatedCourt[randomCourtIndex];
         const benchPlayerToSubstitute = availableBenchPlayers[randomBenchIndex];
-  
+
         if (!excludedPlayers.includes(courtPlayerToSubstitute)) {
           substitutedPlayers.push(
             `Substitute ${benchPlayerToSubstitute.name} for ${courtPlayerToSubstitute.name}`
           );
-  
+
           updatedCourt.splice(randomCourtIndex, 1);
           availableBenchPlayers.splice(randomBenchIndex, 1);
         }
@@ -275,26 +291,27 @@ const Game = () => {
     const randomBenchIndex = Math.floor(Math.random() * playersOnBench.length);
     const substitutePlayer = playersOnBench[randomBenchIndex];
 
-      // Check if the substitute player is excluded
+    // Check if the substitute player is excluded
     if (excludedPlayers.includes(substitutePlayer)) {
       // Retry the substitution if the substitute player is excluded
       handleEmergencySubstitution(injuredPlayer);
       return;
     }
-  
+
     const updatedPlayersOnCourt = [...playersOnCourt];
     const updatedPlayersOnBench = [...playersOnBench];
-  
-    const injuredPlayerIndex = updatedPlayersOnCourt.findIndex(player => player.name === injuredPlayer.name);
-    
+
+    const injuredPlayerIndex = updatedPlayersOnCourt.findIndex(
+      (player) => player.name === injuredPlayer.name
+    );
+
     if (injuredPlayerIndex !== -1) {
       updatedPlayersOnCourt[injuredPlayerIndex] = substitutePlayer;
       updatedPlayersOnBench[randomBenchIndex] = injuredPlayer;
-  
+
       // Increment substitutions count for the substituted player and the substitute player
       injuredPlayer.substitutions++;
-      
-  
+
       setPlayersOnCourt(updatedPlayersOnCourt);
       setPlayersOnBench(updatedPlayersOnBench);
     }
@@ -307,7 +324,9 @@ const Game = () => {
   const formatTime = (seconds) => {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
-    return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+    return `${minutes.toString().padStart(2, '0')}:${remainingSeconds
+      .toString()
+      .padStart(2, '0')}`;
   };
 
   return (
@@ -319,10 +338,23 @@ const Game = () => {
           <Box sx={{ textAlign: 'center', mb: 4 }}>
             <Typography className="timer-value red big" component="span" variant="h6">{formatTime(timer)}</Typography>
             <Stack direction="row" spacing={2} sx={{ my: 2 }}>
-              <Box sx={{ my: 2 }}>
-                <Button variant="outlined" onClick={handleRestartTimer}>Reset Time</Button>
-              </Box>
-              <Button variant="contained" onClick={handleRestartApp}>Start Again</Button>
+              <Button variant="contained" onClick={handleRestartApp}>
+                Home
+              </Button>
+              <Button
+                variant="outlined"
+                onClick={handleRestartTimer}
+                sx={{ my: 2 }}
+              >
+                Reset Time
+              </Button>
+              <Button
+                variant="contained"
+                onClick={handlePauseResumeTimer}
+                sx={{ my: 2 }}
+              >
+                {isTimerPaused ? 'Resume' : 'Pause'}
+              </Button>
             </Stack>
           </Box>
         )}
