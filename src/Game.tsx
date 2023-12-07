@@ -332,7 +332,7 @@ const Game = () => {
   return (
     <Container className="page-container" maxWidth="lg">
       <Box className="content-container" sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-        <Typography variant="h4" gutterBottom>Game Information</Typography>
+        <Typography variant="h4" gutterBottom>Game </Typography>
 
         {gameStarted && (
           <Box sx={{ textAlign: 'center', mb: 4 }}>
