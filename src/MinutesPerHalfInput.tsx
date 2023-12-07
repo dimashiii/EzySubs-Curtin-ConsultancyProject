@@ -27,7 +27,7 @@ const MinutesPerHalfInput = ({ onMinutesPerHalfSubmit }) => {
     <Container className="page-container">
       <Box className="content-container">
         <Typography variant="h4" gutterBottom>
-          Game Settings
+          Settings
         </Typography>
         <form onSubmit={handleSubmit}>
           <Typography variant="h6" gutterBottom></Typography>

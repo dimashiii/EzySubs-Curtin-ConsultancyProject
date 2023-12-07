@@ -60,7 +60,7 @@ const PlayerInputForm = ({ onNext }) => {
           maxWidth: isMobile ? 350 : 800
         }}
       >
-        <Typography variant='h4' align="center">Team Information</Typography>
+        <Typography variant='h4' align="center">Team </Typography>
         <Box sx={{ maxHeight: 500, overflow: 'auto', width: '100%' }}>
           <Stack spacing={2}>
             
@@ -77,12 +77,12 @@ const PlayerInputForm = ({ onNext }) => {
                 <TextField
                   fullWidth
                   type="text"
-                  label={`Player ${index + 1} Name`}
+                  label={`Player ${index + 1} `}
                   variant="outlined"
                   value={player.name}
                   onChange={(e) => handleInputChange(e, player.id, 'name')}
                   required
-                  sx={{ width: isMobile ? '100%' : '50%', border: 1, borderColor: 'primary.main', borderRadius: 1, marginBottom: 2, textAlign: 'left'}}
+                  sx={{ width: '45%', border: 1, borderColor: 'primary.main', borderRadius: 1, marginBottom: 2, textAlign: 'left'}}
                   
                 />
                 <TextField
@@ -92,7 +92,7 @@ const PlayerInputForm = ({ onNext }) => {
                   onChange={(e) => handleInputChange(e, player.id, 'size')}
                   variant="outlined"
                   required
-                  sx={{ width: isMobile ? '100%' : '25%', mt: isMobile ? 2 : 0, ml: 2, border: 1, borderColor: 'primary.main', borderRadius: 1, marginBottom: 2 }}
+                  sx={{ width: '25%', mt: isMobile ? 2 : 0, ml: 2, border: 1, borderColor: 'primary.main', borderRadius: 1, marginBottom: 2 }}
 
                   
                 >
