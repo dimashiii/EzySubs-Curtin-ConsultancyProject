@@ -25,11 +25,13 @@ const PlayerInputForm = ({ onNext }) => {
 
   // Dispatch addPlayer action five times on component mount
   useEffect(() => {
-    for (let i = 0; i < 5; i++) {
-      dispatch(addPlayer());
+    if (players.length === 0) {
+      for (let i = 0; i < 5; i++) {
+        dispatch(addPlayer());
+      }
     }
-  }, [dispatch]);
-
+  }, [dispatch, players.length]);
+  
   const handleNext = () => {
     onNext(players);
   };
