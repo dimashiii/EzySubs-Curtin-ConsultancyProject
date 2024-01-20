@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -22,6 +22,13 @@ const PlayerInputForm = ({ onNext }) => {
       return players.find((player) => player.id === id);
     };
   }, [players]);
+
+  // Dispatch addPlayer action five times on component mount
+  useEffect(() => {
+    for (let i = 0; i < 5; i++) {
+      dispatch(addPlayer());
+    }
+  }, [dispatch]);
 
   const handleNext = () => {
     onNext(players);
@@ -93,8 +100,6 @@ const PlayerInputForm = ({ onNext }) => {
                   variant="outlined"
                   required
                   sx={{ width: '25%', mt: isMobile ? 2 : 0, ml: 2, border: 1, borderColor: 'primary.main', borderRadius: 1, marginBottom: 2 }}
-
-                  
                 >
                   <MenuItem value="">Select Size</MenuItem>
                   <MenuItem value="Big">Big</MenuItem>
@@ -105,7 +110,6 @@ const PlayerInputForm = ({ onNext }) => {
             
             <Stack direction="column" spacing={2}>
               <Button variant="outlined" sx={{ width: '100%' }} onClick={handleAddPlayer}>
-              
                 ADD
               </Button>
               <Button variant="outlined" sx={{ width: '100%' }} onClick={handleDeleteLastPlayer}>
@@ -123,6 +127,7 @@ const PlayerInputForm = ({ onNext }) => {
 };
 
 export default PlayerInputForm;
+
 
 
 
