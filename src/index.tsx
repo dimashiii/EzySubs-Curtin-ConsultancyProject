@@ -3,11 +3,12 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import store from './app/store'
+import store, { persistor } from './app/store'
 import { Provider } from 'react-redux'
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from './theme';
+import { PersistGate } from 'redux-persist/integration/react';
 
 const rootElement = document.getElementById('root');
 
@@ -16,10 +17,12 @@ if (rootElement) {
   root.render(
     <ThemeProvider theme={theme}>
     <Provider store={store}>
-      <React.StrictMode>
-        <CssBaseline />
-        <App />
-      </React.StrictMode>
+      <PersistGate loading={null} persistor={persistor}>
+        <React.StrictMode>
+          <CssBaseline />
+          <App />
+        </React.StrictMode>
+      </PersistGate>
     </Provider>
     </ThemeProvider>
   );
