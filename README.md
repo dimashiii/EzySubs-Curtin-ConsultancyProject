@@ -92,7 +92,7 @@ git push -u origin feature-yourname-task
 - Keep your branch updated with `develop` to avoid conflicts.
 - Commit messages should be **short but clear**
 - Test your changes before creating a Pull Request
-- - Run `npm install` after pulling if there are dependency updates
+- Run `npm install` after pulling if there are dependency updates
 
 ---
 
