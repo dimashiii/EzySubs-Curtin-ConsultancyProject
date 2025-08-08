@@ -1,4 +1,6 @@
 # 🏀 EzySubs Project
+> All original source code and project IP belong to **Project Owner (Client):** Jeremiah Mein — Maikazconsult  
+> Used here for the Curtin MGMT6052 consultancy project. 
 
 ![GitHub repo size](https://img.shields.io/github/repo-size/dimashiii/EzySubs-Curtin-ConsultancyProject)
 ![GitHub contributors](https://img.shields.io/github/contributors/dimashiii/EzySubs-Curtin-ConsultancyProject)
