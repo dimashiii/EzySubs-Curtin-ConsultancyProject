@@ -6,6 +6,7 @@ import { useRef } from 'react';
 import alarmSound from './alarm.wav';
 import './declarations.d.ts';
 
+
 const Game = () => {
   const playersData = useAppSelector((state) => state.players.players);
   const minutesPerHalfData = useAppSelector((state) => state.gameManagement);

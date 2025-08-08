@@ -4,12 +4,14 @@ export interface GameManagementState {
   minutesPerHalf: number;
   minutesToSubstitute: number;
   playersPerSubstitution: number;
+  substitutionMinutes: number; // ✅ New field
 }
 
 const initialState: GameManagementState = {
   minutesPerHalf: 0,
   minutesToSubstitute: 0,
   playersPerSubstitution: 0,
+  substitutionMinutes: 0, // ✅ Initialize it here too
 };
 
 export const gameManagementSlice = createSlice({
@@ -20,15 +22,11 @@ export const gameManagementSlice = createSlice({
       state.minutesPerHalf = action.payload.minutesPerHalf;
       state.minutesToSubstitute = action.payload.minutesToSubstitute;
       state.playersPerSubstitution = action.payload.playersPerSubstitution;
+      state.substitutionMinutes = action.payload.substitutionMinutes; // ✅ Update from payload
     },
-    resetGameData: (state) => {
-      return initialState; // Reset the state to initial values
-    },
+    resetGameData: () => initialState,
   },
 });
 
-// Export action creators
 export const { updateGameData, resetGameData } = gameManagementSlice.actions;
-
-// Export reducer as default export
 export default gameManagementSlice.reducer;

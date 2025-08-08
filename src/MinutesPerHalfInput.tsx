@@ -9,17 +9,27 @@ import Button from '@mui/material/Button';
 
 const MinutesPerHalfInput = ({ onMinutesPerHalfSubmit }) => {
   const gameManagement = useAppSelector((state) => state.gameManagement);
-  const { minutesPerHalf, minutesToSubstitute, playersPerSubstitution } = gameManagement;
+  const {
+    minutesPerHalf,
+    minutesToSubstitute,
+    playersPerSubstitution,
+    substitutionMinutes
+  } = gameManagement;
+
   const dispatch = useAppDispatch();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onMinutesPerHalfSubmit(minutesPerHalf, minutesToSubstitute, playersPerSubstitution);
+    onMinutesPerHalfSubmit(
+      minutesPerHalf,
+      minutesToSubstitute,
+      playersPerSubstitution,
+      substitutionMinutes
+    );
   };
 
   const handleInputChange = (e, field) => {
-    const newGameManagement = { ...gameManagement };
-    newGameManagement[field] = e.target.value;
+    const newGameManagement = { ...gameManagement, [field]: e.target.value };
     dispatch(updateGameData(newGameManagement));
   };
 
@@ -30,7 +40,6 @@ const MinutesPerHalfInput = ({ onMinutesPerHalfSubmit }) => {
           Settings
         </Typography>
         <form onSubmit={handleSubmit}>
-          <Typography variant="h6" gutterBottom></Typography>
           <div className="input-container">
             <label htmlFor="minutesPerHalf">Minutes per half:</label>
             <Input
@@ -38,7 +47,7 @@ const MinutesPerHalfInput = ({ onMinutesPerHalfSubmit }) => {
               id="minutesPerHalf"
               value={minutesPerHalf}
               onChange={(e) => handleInputChange(e, 'minutesPerHalf')}
-              sx={{ width: '30%', border: 1, borderColor: 'primary.main', borderRadius: 1, marginBottom: 2 }} // Adjusted width
+              sx={{ width: '30%', border: 1, borderColor: 'primary.main', borderRadius: 1, marginBottom: 2 }}
             />
           </div>
 
@@ -49,7 +58,7 @@ const MinutesPerHalfInput = ({ onMinutesPerHalfSubmit }) => {
               id="minutesToSubstitute"
               value={minutesToSubstitute}
               onChange={(e) => handleInputChange(e, 'minutesToSubstitute')}
-              sx={{ width: '30%', border: 1, borderColor: 'primary.main', borderRadius: 1, marginBottom: 2 }} // Adjusted width
+              sx={{ width: '30%', border: 1, borderColor: 'primary.main', borderRadius: 1, marginBottom: 2 }}
             />
           </div>
 
@@ -60,10 +69,24 @@ const MinutesPerHalfInput = ({ onMinutesPerHalfSubmit }) => {
               id="playersPerSubstitution"
               value={playersPerSubstitution}
               onChange={(e) => handleInputChange(e, 'playersPerSubstitution')}
-              sx={{ width: '30%', border: 1, borderColor: 'primary.main', borderRadius: 1, marginBottom: 2 }} // Adjusted width
+              sx={{ width: '30%', border: 1, borderColor: 'primary.main', borderRadius: 1, marginBottom: 2 }}
             />
           </div>
-          <Button type="submit" variant="contained" color="primary" sx={{ marginTop: 2 }}>Next</Button>
+
+          <div className="input-container">
+            <label htmlFor="substitutionMinutes">Substitution Minutes:</label>
+            <Input
+              type="number"
+              id="substitutionMinutes"
+              value={substitutionMinutes || ''}
+              onChange={(e) => handleInputChange(e, 'substitutionMinutes')}
+              sx={{ width: '30%', border: 1, borderColor: 'primary.main', borderRadius: 1, marginBottom: 2 }}
+            />
+          </div>
+
+          <Button type="submit" variant="contained" color="primary" sx={{ marginTop: 2 }}>
+            Next
+          </Button>
         </form>
       </Box>
     </Container>
@@ -71,6 +94,7 @@ const MinutesPerHalfInput = ({ onMinutesPerHalfSubmit }) => {
 };
 
 export default MinutesPerHalfInput;
+
 
 
 

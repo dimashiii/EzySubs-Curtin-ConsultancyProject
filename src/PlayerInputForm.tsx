@@ -18,12 +18,9 @@ const PlayerInputForm = ({ onNext }) => {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const findPlayer = useMemo(() => {
-    return (id) => {
-      return players.find((player) => player.id === id);
-    };
+    return (id) => players.find((player) => player.id === id);
   }, [players]);
 
-  // Dispatch addPlayer action five times on component mount
   useEffect(() => {
     if (players.length === 0) {
       for (let i = 0; i < 5; i++) {
@@ -31,15 +28,14 @@ const PlayerInputForm = ({ onNext }) => {
       }
     }
   }, [dispatch, players.length]);
-  
+
   const handleNext = () => {
     onNext(players);
   };
 
   const handleInputChange = (e, playerId, field) => {
     const player = findPlayer(playerId);
-    const newPlayer = { ...player };
-    newPlayer[field] = e.target.value;
+    const newPlayer = { ...player, [field]: e.target.value };
     dispatch(updatePlayer(newPlayer));
   };
 
@@ -69,47 +65,47 @@ const PlayerInputForm = ({ onNext }) => {
           maxWidth: isMobile ? 350 : 800
         }}
       >
-        <Typography variant='h4' align="center">Team </Typography>
+        <Typography variant='h4' align="center">Team</Typography>
         <Box sx={{ maxHeight: 500, overflow: 'auto', width: '100%' }}>
           <Stack spacing={2}>
-            
             {players.map((player, index) => (
               <Box
                 key={player.id}
                 sx={{
                   display: 'flex',
                   flexDirection: isMobile ? 'column' : 'row',
-                  
                   width: '100%'
                 }}
               >
                 <TextField
                   fullWidth
                   type="text"
-                  label={`Player ${index + 1} `}
+                  label={`Player ${index + 1}`}
                   variant="outlined"
                   value={player.name}
                   onChange={(e) => handleInputChange(e, player.id, 'name')}
                   required
-                  sx={{ width: '45%', border: 1, borderColor: 'primary.main', borderRadius: 1, marginBottom: 2, textAlign: 'left'}}
-                  
+                  sx={{ width: '45%', border: 1, borderColor: 'primary.main', borderRadius: 1, marginBottom: 2 }}
                 />
                 <TextField
                   select
-                  label="Size"
+                  label="Position"
                   value={player.size}
                   onChange={(e) => handleInputChange(e, player.id, 'size')}
                   variant="outlined"
                   required
-                  sx={{ width: '25%', mt: isMobile ? 2 : 0, ml: 2, border: 1, borderColor: 'primary.main', borderRadius: 1, marginBottom: 2 }}
+                  sx={{ width: '45%', mt: isMobile ? 2 : 0, ml: 2, border: 1, borderColor: 'primary.main', borderRadius: 1, marginBottom: 2 }}
                 >
-                  <MenuItem value="">Select Size</MenuItem>
-                  <MenuItem value="Big">Big</MenuItem>
-                  <MenuItem value="Small">Sml</MenuItem>
+                  <MenuItem value="">Select Position</MenuItem>
+                  <MenuItem value="PG">Point Guard </MenuItem>
+                  <MenuItem value="SG">Shooting Guard </MenuItem>
+                  <MenuItem value="SF">Small Forward </MenuItem>
+                  <MenuItem value="PF">Power Forward </MenuItem>
+                  <MenuItem value="C">Center </MenuItem>
                 </TextField>
               </Box>
             ))}
-            
+
             <Stack direction="column" spacing={2}>
               <Button variant="outlined" sx={{ width: '100%' }} onClick={handleAddPlayer}>
                 ADD
@@ -129,6 +125,7 @@ const PlayerInputForm = ({ onNext }) => {
 };
 
 export default PlayerInputForm;
+
 
 
 
