@@ -21,8 +21,6 @@ This guide will help you **set up the project locally** and follow the **team’
   > We recommend Node **18.x** because it’s the LTS (Long-Term Support) version used when this project was built.  
   > Newer versions (like Node 20) *might* work, but could cause dependency or build issues.
 
----
-
 ### **Clone & Install**
 ```bash
 # 1️⃣ Clone the repository
@@ -52,8 +50,6 @@ The app will start on **[http://localhost:3000](http://localhost:3000)** in your
 - **`develop`** → Shared development branch for integrating all features
 - **feature-yourname-task** → Each developer works in their own branch
 
----
-
 ### **Branch Naming**
 ```
 feature-yourname-task
@@ -64,7 +60,6 @@ feature-yang-login-page
 feature-reswanul-drag-drop-update
 
 ```
----
 
 ### **Daily Workflow**
 1. **Update `develop` before starting work**:
